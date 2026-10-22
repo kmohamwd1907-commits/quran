@@ -1,5 +1,5 @@
 const SHELL_CACHE = 'noor-quran-shell-v2';
-const DATA_CACHE = 'noor-quran-data-v2';
+const DATA_CACHE = 'noor-quran-data-v3';
 const SHELL_URLS = ['/', '/index.html', '/manifest.webmanifest'];
 
 self.addEventListener('install', event => {
