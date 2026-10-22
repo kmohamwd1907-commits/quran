@@ -1,1237 +1,217 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>نور القرآن | القرآن الكريم كاملًا</title>
-  <meta name="description" content="موقع القرآن الكريم كاملًا: مصحف، قراءة، استماع بأصوات كبار القراء، تفسير ميسر، بحث في الآيات، علامات مرجعية ومواقيت الصلاة.">
-  <meta name="theme-color" content="#0a0a0a">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="نور القرآن">
-  <!-- Vercel Web Analytics: enable Web Analytics in the Vercel project dashboard -->
-  <script>
-// حفظ اختيار الوضع الليلي/النهاري على الجهاز
-(function(){
-  const saved = localStorage.getItem('noor-quran-theme');
-  document.documentElement.dataset.theme = saved === 'light' ? 'light' : 'dark';
-})();
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/insights/script.js"></script>
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@400;600;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Ccircle cx='50' cy='50' r='26' fill='none' stroke='%23d4af37' stroke-width='8'/%3E%3C/svg%3E">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نور — القرآن الكريم والأذكار والأحاديث</title>
+<meta name="description" content="القرآن الكريم كاملاً، أذكار الصباح والمساء وبعد الصلاة، والأربعون النووية.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0a0a0a;--bg2:#111111;--card:#151515;--line:#2a2412;
-  --gold:#d4af37;--gold-2:#f1d06b;--gold-3:#a8801c;
-  --text:#f3ead2;--muted:#9b9378;--fs:34px;--radius:16px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:'Cairo',system-ui,sans-serif;background:var(--bg);color:var(--text);
-  line-height:1.7;min-height:100vh;padding-bottom:90px;
-}
-button,input,select{font-family:inherit;color:inherit}
-button{cursor:pointer}
-[hidden]{display:none!important}
-.muted{color:var(--muted);font-size:.9rem}
-
-.top{
-  position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;
-  padding:12px clamp(14px,4vw,40px);background:rgba(10,10,10,.92);
-  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
-}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.brand-name{
-  font-family:'Reem Kufi',serif;font-size:1.6rem;font-weight:700;
-  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.search{flex:1;max-width:520px;margin-inline:auto}
-.search input{
-  width:100%;padding:10px 18px;border-radius:999px;border:1px solid var(--line);
-  background:var(--bg2);outline:none;transition:.2s;font-size:.95rem;
-}
-.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.15)}
-.search input::placeholder{color:var(--muted)}
-.icon-btn{
-  width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--bg2);
-  color:var(--gold);font-size:1.1rem;transition:.2s;display:inline-grid;place-items:center;flex:none;
-}
-.icon-btn:hover{border-color:var(--gold);background:#1b1708}
-.icon-btn.big{width:52px;height:52px;background:linear-gradient(135deg,var(--gold-2),var(--gold-3));color:#0a0a0a;border:none;font-size:1.2rem}
-
-main{max-width:1100px;margin:0 auto;padding:28px clamp(14px,4vw,32px)}
-
-.btn{padding:10px 22px;border-radius:999px;font-weight:600;font-size:.95rem;border:1px solid var(--gold);transition:.2s}
-.btn.gold{background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));color:#0a0a0a;border:none}
-.btn.gold:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn.ghost{background:transparent;color:var(--gold)}
-.btn.ghost:hover{background:rgba(212,175,55,.1)}
-.link-btn{background:none;border:none;color:var(--gold);font-size:.85rem;text-decoration:underline}
-
-.hero{display:grid;grid-template-columns:1fr 300px;gap:22px;margin-bottom:34px}
-.hero-main,.prayer{
-  background:linear-gradient(160deg,#17140a,#0e0e0e);border:1px solid var(--line);
-  border-radius:22px;padding:28px;position:relative;overflow:hidden;
-}
-.eyebrow{color:var(--gold);font-weight:700;margin-bottom:10px;position:relative}
-.daily{position:relative;min-height:120px}
-.daily .verse{font-family:'Amiri Quran',serif;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:2.1;color:var(--gold-2)}
-.daily .ref{margin-top:8px;color:var(--muted);font-size:.9rem}
-.daily .tf{margin-top:10px;color:var(--text);opacity:.85;font-size:.95rem}
-.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;position:relative}
-.prayer h3{font-family:'Reem Kufi',serif;color:var(--gold);font-size:1.25rem}
-.prayer-head{display:flex;justify-content:space-between;align-items:center}
-.prayer ul{list-style:none;margin-top:12px}
-.prayer li{display:flex;justify-content:space-between;padding:8px 10px;border-radius:10px;font-size:.95rem}
-.prayer li.next{background:rgba(212,175,55,.14);color:var(--gold-2);font-weight:700}
-
-.tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:1px solid var(--line)}
-.tab{background:none;border:none;padding:10px 20px;color:var(--muted);font-weight:600;font-size:1rem;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.2s}
-.tab.active{color:var(--gold);border-color:var(--gold)}
-.tab:hover{color:var(--gold-2)}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-.card{
-  display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);
-  border-radius:var(--radius);padding:14px 16px;text-align:right;transition:.2s;width:100%;
-}
-.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,.08)}
-.num{width:42px;height:42px;flex:none;display:grid;place-items:center;color:var(--gold);font-weight:700;position:relative;font-size:.95rem}
-.num::before{content:"";position:absolute;inset:4px;border:1.5px solid var(--gold);transform:rotate(45deg);border-radius:4px}
-.num::after{content:"";position:absolute;inset:4px;border:1.5px solid var(--gold-3);border-radius:4px;opacity:.6}
-.num span{position:relative;z-index:1}
-.card-body{flex:1;min-width:0}
-.card-name{font-family:'Amiri Quran',serif;font-size:1.45rem;color:var(--gold-2);line-height:1.5}
-.card-meta{font-size:.8rem;color:var(--muted)}
-.card-end{font-family:'Reem Kufi',serif;color:var(--gold-3);font-size:.9rem}
-.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
-
-.section-title{font-family:'Reem Kufi',serif;color:var(--gold);margin:16px 0}
-.results{display:grid;gap:12px}
-.result{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;cursor:pointer;transition:.2s;text-align:right;width:100%}
-.result:hover{border-color:var(--gold)}
-.result .rt{font-family:'Amiri Quran',serif;font-size:1.5rem;line-height:2;color:var(--text)}
-.result .rr{color:var(--gold);font-size:.85rem;margin-top:4px}
-mark{background:rgba(212,175,55,.3);color:var(--gold-2);border-radius:4px;padding:0 2px}
-
-.reader-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.ctl{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted)}
-select{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;outline:none;color:var(--text)}
-select:focus{border-color:var(--gold)}
-input[type=range]{accent-color:var(--gold);cursor:pointer}
-.switch input{accent-color:var(--gold);width:18px;height:18px}
-.switch span{color:var(--text)}
-
-.surah-head{text-align:center;padding:30px 16px 24px;margin-bottom:22px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,#17140a,#0e0e0e)}
-.surah-head h1{
-  font-family:'Amiri Quran',serif;font-size:clamp(2.2rem,6vw,3.6rem);font-weight:400;
-  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.bismillah{font-family:'Amiri Quran',serif;font-size:clamp(1.5rem,3.5vw,2.1rem);color:var(--gold-2);margin:10px 0 18px}
-
-.ayah{padding:20px 8px 14px;border-bottom:1px solid #1c1a10;transition:background .3s;border-radius:12px}
-.ayah.active{background:rgba(212,175,55,.09);box-shadow:inset 3px 0 0 var(--gold)}
-.ayah.last{box-shadow:inset 3px 0 0 var(--gold-3)}
-.atext{font-family:'Amiri Quran',serif;font-size:var(--fs);line-height:2.3;color:var(--text);cursor:pointer;text-align:justify}
-.amark{color:var(--gold);font-size:.75em;margin-inline-start:6px;white-space:nowrap}
-.tafsir{margin-top:8px;padding:12px 16px;border-radius:12px;background:var(--bg2);border:1px dashed var(--line);color:#cfc6aa;font-size:1rem;line-height:1.9}
-.acts{display:flex;gap:8px;margin-top:10px;opacity:.75}
-.ayah:hover .acts,.ayah.active .acts{opacity:1}
-.act{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.82rem;color:var(--gold);transition:.2s}
-.act:hover{border-color:var(--gold)}
-.act.on{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
-.surah-nav{display:flex;justify-content:space-between;gap:12px;margin:36px 0 10px}
-
-.tabs{overflow-x:auto;white-space:nowrap;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:none}
-.az-top{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.dhikr.done{opacity:.55}
-.dhikr .h-text::before,.dhikr .h-text::after{content:none}
-.ayah-banner{text-align:center;font-family:'Amiri Quran',serif;font-size:clamp(1.2rem,3vw,1.6rem);color:var(--gold);padding:14px 16px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#12100a,var(--bg))}
-.hadith-list{grid-template-columns:1fr}
-.hadith{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px}
-.h-intro{color:var(--gold);font-size:.9rem;margin-bottom:6px}
-.h-text{font-family:'Amiri Quran',serif;font-size:calc(var(--fs)*.75);line-height:2.2;color:var(--text)}
-.h-text::before{content:"«";color:var(--gold);margin-inline-end:4px}
-.h-text::after{content:"»";color:var(--gold);margin-inline-start:4px}
-.h-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-.h-no{color:var(--gold-3);font-family:'Reem Kufi',serif}
-
-/* المصحف */
-.m-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.m-ctrls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.m-input{width:78px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;outline:none;text-align:center}
-.m-input:focus{border-color:var(--gold)}
-.m-page{
-  touch-action:pan-y;
-  user-select:none;-webkit-user-select:none;
-  max-width:780px;margin:0 auto;padding:24px clamp(14px,4vw,44px) 18px;
-  background:linear-gradient(180deg,#15120a,#0d0b06);
-  border:2px solid var(--gold-3);border-radius:10px;min-height:60vh;
-  box-shadow:0 0 0 6px #0a0a0a,0 0 0 7px var(--gold-3),0 24px 60px rgba(0,0,0,.65);
-}
-.m-top{display:flex;justify-content:space-between;color:var(--gold);font-family:'Reem Kufi',serif;font-size:1.05rem;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:12px}
-.m-foot{display:flex;justify-content:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
-.m-foot span{
-  min-width:44px;height:44px;display:grid;place-items:center;color:var(--gold-2);font-weight:700;
-  border:1.5px solid var(--gold);border-radius:50%;
-}
-.m-surah{
-  text-align:center;margin:16px 0 10px;padding:8px;border:1.5px solid var(--gold);border-radius:8px;
-  background:linear-gradient(90deg,transparent,rgba(212,175,55,.2),transparent);
-  font-family:'Amiri Quran',serif;font-size:1.7rem;color:var(--gold-2);
-}
-.m-bism{text-align:center;font-family:'Amiri Quran',serif;font-size:calc(var(--fs)*.85);color:var(--gold-2);margin:6px 0 8px}
-.m-run{font-family:'Amiri Quran',serif;font-size:calc(var(--fs)*.9);line-height:2.35;text-align:justify;text-align-last:center;color:var(--text)}
-.m-nav{display:flex;justify-content:space-between;gap:12px;max-width:780px;margin:22px auto 0}
-
-.player{
-  position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:16px;
-  padding:10px clamp(14px,4vw,40px);background:rgba(12,12,12,.97);
-  backdrop-filter:blur(12px);border-top:1px solid var(--gold-3);
-}
-.p-info{display:flex;flex-direction:column;min-width:130px;line-height:1.4}
-.p-info strong{color:var(--gold-2);font-family:'Amiri Quran',serif;font-size:1.2rem}
-.p-ctrl{display:flex;align-items:center;gap:8px}
-#pSeek{flex:1}
-
-.foot{text-align:center;padding:34px 16px;border-top:1px solid var(--line);margin-top:30px}
-.foot p{font-family:'Amiri Quran',serif;font-size:1.4rem;color:var(--gold)}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:80;background:var(--gold);color:#0a0a0a;padding:10px 22px;border-radius:999px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.6)}
-.loader{color:var(--muted);text-align:center;padding:30px}
-
-::-webkit-scrollbar{width:10px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--gold-3);border-radius:10px}
-
-@media (max-width:820px){
-  .hero{grid-template-columns:1fr}
-  .brand-name{display:none}
-  .p-info{min-width:0}
-  .p-info span{display:none}
-}
-@media (max-width:520px){
-  .controls{gap:10px}
-  .player{gap:8px}
-  .surah-nav .btn,.m-nav .btn{padding:10px 14px;font-size:.85rem}
-}
-
-/* الوضع النهاري: ألوان فاتحة مع الحفاظ على الهوية الذهبية */
-html[data-theme="light"]{
-  --bg:#f7f4ea;--bg2:#fffdf7;--card:#ffffff;--line:#e2d7b4;
-  --gold:#987313;--gold-2:#b58a16;--gold-3:#e0bd55;
-  --text:#242016;--muted:#716b5b;
-}
-html[data-theme="light"] .top{background:rgba(255,253,247,.94)}
-html[data-theme="light"] .hero-main,
-html[data-theme="light"] .prayer{background:linear-gradient(160deg,#fff8df,#ffffff)}
-html[data-theme="light"] .icon-btn:hover{background:#f4ebce}
-html[data-theme="light"] .icon-btn.big{color:#201a08}
-html[data-theme="light"] #offlineStatus{background:#fff8df!important;color:#80600b!important}
-html[data-theme="light"] #offlineDownloadBox{background:#fffdf7!important;border-color:#e2d7b4!important}
-html[data-theme="light"] .daily .verse{color:#987313}
-html[data-theme="light"] .player,
-html[data-theme="light"] .modal,
-html[data-theme="light"] .reader,
-html[data-theme="light"] .tafseer,
-html[data-theme="light"] .search input{background:var(--bg2)}
-/* وضوح نص القرآن في الوضع النهاري */
-html[data-theme="light"] .m-page{
-  background:#fffdf7;
-  border-color:#b58a16;
-  box-shadow:0 0 0 6px #f7f4ea,0 0 0 7px #b58a16,0 24px 60px rgba(70,55,10,.16);
-}
-html[data-theme="light"] .m-run{color:#17150f}
-html[data-theme="light"] .m-bism{color:#80600b}
-html[data-theme="light"] .m-surah{color:#80600b;background:linear-gradient(90deg,transparent,rgba(181,138,22,.12),transparent)}
-html[data-theme="light"] .m-top{color:#80600b}
-html[data-theme="light"] .m-foot span{color:#80600b;border-color:#b58a16}
-html[data-theme="light"] .m-run .amark{color:#80600b}
-html[data-theme="light"] .m-page .loader{color:#716b5b}
+:root{--bg:#f3f6f1;--card:#fff;--ink:#16261f;--mute:#5d6f66;--line:#d5dfd7;--acc:#0e5c4a;--acc2:#b8892b;--accsoft:#e2efe9}
+:root[data-theme=dark]{--bg:#0f1a16;--card:#16251f;--ink:#e8efe9;--mute:#98aaa1;--line:#27382f;--acc:#4fc3a1;--acc2:#e0b559;--accsoft:#1b3128}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Readex Pro',Tahoma,system-ui,sans-serif;line-height:1.7}
+header{background:var(--acc);color:#fff;padding:18px 16px 0}
+:root[data-theme=dark] header{background:#12362b}
+.top{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{margin:0;font-family:'Amiri Quran',serif;font-size:2rem;font-weight:400}
+.tools button{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;margin-inline-start:6px}
+nav{max-width:900px;margin:14px auto 0;display:flex;gap:4px}
+nav a{flex:1;text-align:center;padding:10px 6px;color:#fff;text-decoration:none;opacity:.75;border-bottom:3px solid transparent}
+nav a.on{opacity:1;border-color:var(--acc2);font-weight:600}
+main{max-width:900px;margin:auto;padding:20px 14px 60px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+input[type=search]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.s{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:inherit;text-decoration:none}
+.s:hover{border-color:var(--acc)}
+.n{min-width:36px;height:36px;display:grid;place-items:center;background:var(--accsoft);color:var(--acc);border-radius:50%;font-size:.9rem}
+.s b{font-family:'Amiri Quran',serif;font-size:1.3rem;font-weight:400}
+.s small{display:block;color:var(--mute);font-size:.75rem}
+.page{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 20px}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
+.bar a,.bar button{background:var(--accsoft);color:var(--acc);border:0;border-radius:8px;padding:6px 14px;text-decoration:none;font:inherit;cursor:pointer}
+.mushaf{font-family:'Amiri Quran',serif;line-height:2.5;text-align:justify;font-size:var(--fs,1.9rem)}
+.mushaf .a{cursor:pointer}
+.mushaf .a.mark{background:var(--accsoft);border-radius:6px}
+.end{color:var(--acc2);font-size:.8em;margin:0 4px}
+.bsm{text-align:center;font-family:'Amiri Quran',serif;font-size:1.9rem;color:var(--acc);margin:6px 0 14px}
+.z{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.z p{margin:0 0 10px;font-size:1.1rem}
+.z .src{color:var(--mute);font-size:.8rem}
+.cnt{display:inline-flex;align-items:center;gap:10px;background:var(--accsoft);color:var(--acc);border:0;border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer;margin-top:6px}
+.cnt.done{background:var(--acc);color:#fff}
+.sub{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.sub button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer}
+.sub button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.h{font-size:1.1rem}.h .num{color:var(--acc2);font-weight:600;font-size:.85rem}
+.msg{text-align:center;color:var(--mute);padding:40px 0}
+select{padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+.pr{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.pr.nx{background:var(--accsoft);color:var(--acc);font-weight:600}
+#nx{text-align:center;font-size:1.2rem;color:var(--acc);margin:10px 0 16px}
 </style>
 </head>
 <body>
-
-<header class="top">
-  <a class="brand" href="#" id="brand">
-    <span class="brand-name">نور القرآن</span>
-  </a>
-  <div class="search">
-    <input id="q" type="search" placeholder="ابحث عن سورة أو حديث أو ذكر، أو اضغط Enter للبحث في الآيات" autocomplete="off">
-  </div>
-  <button id="goMushaf" class="icon-btn" title="المصحف">📖</button>
-  <button id="goBookmarks" class="icon-btn" title="المحفوظات">★</button>
-  <button id="themeToggle" class="icon-btn" type="button" title="تبديل الوضع النهاري والليلي" aria-label="تبديل الوضع">☀️</button>
-  <button id="checkUpdateBtn" class="icon-btn" type="button" title="البحث عن تحديث" aria-label="البحث عن تحديث">↻</button>
+<header>
+ <div class="top">
+  <h1>نُور</h1>
+  <div class="tools"><button id="off">تجهيز أوفلاين</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
+ </div>
+ <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a></nav>
 </header>
-
-<div class="ayah-banner">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</div>
-<main>
-  <section id="home" class="view">
-    <div class="hero">
-      <div class="hero-main">
-        <p class="eyebrow">آية اليوم</p>
-        <div id="daily" class="daily"><div class="loader">جارٍ التحميل…</div></div>
-        <div class="hero-actions">
-          <button id="mushafBtn" class="btn gold">📖 المصحف</button>
-          <button id="continueBtn" class="btn ghost" hidden>أكمل من حيث توقفت</button>
-          <button id="randomBtn" class="btn ghost">سورة عشوائية</button>
-        </div>
-      </div>
-      <aside class="prayer">
-        <div class="prayer-head">
-          <h3>مواقيت الصلاة</h3>
-          <button id="geoBtn" class="link-btn">موقعي</button>
-        </div>
-        <p id="prayerPlace" class="muted">القاهرة</p>
-        <ul id="prayerList"></ul>
-      </aside>
-    </div>
-
-    <div class="tabs" role="tablist">
-      <button class="tab active" data-tab="surahs">السور</button>
-      <button class="tab" data-tab="juz">الأجزاء</button>
-      <button class="tab" data-tab="hadith">الأحاديث</button>
-      <button class="tab" data-tab="morning">أذكار الصباح</button>
-      <button class="tab" data-tab="evening">أذكار المساء</button>
-      <button class="tab" data-tab="bookmarks">المحفوظات</button>
-    </div>
-    <div id="list" class="grid"></div>
-  </section>
-
-  <section id="results" class="view" hidden>
-    <button class="btn ghost back" data-back>→ رجوع</button>
-    <h2 id="resultsTitle" class="section-title"></h2>
-    <div id="resultsList" class="results"></div>
-  </section>
-
-  <section id="reader" class="view" hidden>
-    <div class="reader-bar">
-      <button class="btn ghost back" data-back>→ السور</button>
-      <div class="controls">
-        <button id="toMushaf" class="btn ghost">📖 عرض المصحف</button>
-        <label class="ctl">القارئ
-          <select id="reciter">
-            <option value="ar.alafasy">مشاري العفاسي</option>
-            <option value="ar.abdulsamad">عبد الباسط عبد الصمد</option>
-            <option value="ar.husary">محمود الحصري</option>
-            <option value="ar.husarymujawwad">الحصري (المجوّد)</option>
-            <option value="ar.mahermuaiqly">ماهر المعيقلي</option>
-            <option value="ar.abdurrahmaansudais">عبد الرحمن السديس</option>
-            <option value="ar.saoodshuraym">سعود الشريم</option>
-            <option value="ar.hudhaify">علي الحذيفي</option>
-            <option value="ar.muhammadayyoub">محمد أيوب</option>
-            <option value="ar.muhammadjibreel">محمد جبريل</option>
-            <option value="ar.shaatree">أبو بكر الشاطري</option>
-            <option value="ar.hanirifai">هاني الرفاعي</option>
-            <option value="ar.ahmedajamy">أحمد العجمي</option>
-            <option value="ar.aymanswoaid">أيمن سويد</option>
-            <option value="ar.ibrahimakhbar">إبراهيم الأخضر</option>
-            <option value="ar.abdullahbasfar">عبد الله بصفر</option>
-          </select>
-        </label>
-        <label class="ctl">حجم الخط
-          <input id="fontSize" type="range" min="22" max="64" value="34">
-        </label>
-        <label class="switch ctl">
-          <input id="tafsirToggle" type="checkbox"><span>التفسير الميسر</span>
-        </label>
-      </div>
-    </div>
-
-    <div class="surah-head">
-      <p id="sMeta" class="muted"></p>
-      <h1 id="sTitle"></h1>
-      <p id="bismillah" class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-      <button id="playSurah" class="btn gold">▶ استمع للسورة كاملة</button>
-    </div>
-
-    <div id="ayahs"></div>
-
-    <div class="surah-nav">
-      <button id="prevSurah" class="btn ghost">السورة السابقة →</button>
-      <button id="nextSurah" class="btn ghost">← السورة التالية</button>
-    </div>
-  </section>
-
-  <section id="mushaf" class="view" hidden>
-    <div class="m-bar">
-      <button class="btn ghost back" data-back>→ الرئيسية</button>
-      <div class="m-ctrls">
-        <select id="mSurah"><option value="">اذهب إلى سورة…</option></select>
-        <button id="mSmall" class="icon-btn" title="تصغير الخط">أ-</button>
-        <button id="mBig" class="icon-btn" title="تكبير الخط">أ+</button>
-      </div>
-    </div>
-
-    <div id="mPage" class="m-page"></div>
-
-  </section>
-</main>
-
-
-<div id="player" class="player" hidden>
-  <div class="p-info">
-    <strong id="pTitle">—</strong>
-    <span id="pSub" class="muted"></span>
-  </div>
-  <div class="p-ctrl">
-    <button id="pPrev" class="icon-btn" title="السابقة">⏮</button>
-    <button id="pPlay" class="icon-btn big" title="تشغيل / إيقاف">▶</button>
-    <button id="pNext" class="icon-btn" title="التالية">⏭</button>
-  </div>
-  <input id="pSeek" type="range" min="0" max="100" value="0" step="0.1">
-  <button id="pClose" class="icon-btn" title="إغلاق">✕</button>
-</div>
-
-<div id="toast" class="toast" hidden></div>
+<main id="app"></main>
 
 <script>
-const API = 'https://api.alquran.cloud/v1';
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const $=s=>document.querySelector(s), app=$('#app');
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const fetchJSON=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.json()};
+const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتوى. اتصل بالإنترنت مرة واحدة واضغط «تجهيز أوفلاين» في أعلى الصفحة، وبعدها يعمل الموقع بدون إنترنت.<br><br><button class="cnt" onclick="route()">إعادة المحاولة</button></p>';
 
-const store = {
-  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+/* الوضع الليلي */
+const root=document.documentElement;
+root.dataset.theme=store.get('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+$('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme)};
+$('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else alert('لم تحفظ موضعاً بعد. اضغط على أي آية لحفظها.')};
+
+/* الأذكار */
+const ADHKAR={
+ 'الصباح':[
+  {t:'أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ',c:1,s:'آية الكرسي — البقرة ٢٥٥'},
+  {t:'قُلْ هُوَ اللَّهُ أَحَدٌ ... وقُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ... وقُلْ أَعُوذُ بِرَبِّ النَّاسِ',c:3,s:'سور الإخلاص والفلق والناس — تُقرأ كل سورة ثلاث مرات'},
+  {t:'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',c:1,s:'رواه مسلم'},
+  {t:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ',c:1,s:'سيد الاستغفار — رواه البخاري'},
+  {t:'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ',c:3,s:'رواه أبو داود والترمذي'},
+  {t:'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ',c:100,s:'متفق عليه'}],
+ 'المساء':[
+  {t:'أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ ... (آية الكرسي)',c:1,s:'البقرة ٢٥٥'},
+  {t:'قُلْ هُوَ اللَّهُ أَحَدٌ ... وقُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ... وقُلْ أَعُوذُ بِرَبِّ النَّاسِ',c:3,s:'تُقرأ كل سورة ثلاث مرات'},
+  {t:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',c:1,s:'رواه مسلم'},
+  {t:'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ',c:1,s:'رواه الترمذي'},
+  {t:'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ',c:3,s:'رواه مسلم'},
+  {t:'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ',c:100,s:'متفق عليه'}],
+ 'بعد الصلاة':[
+  {t:'أَسْتَغْفِرُ اللَّهَ',c:3,s:'رواه مسلم'},
+  {t:'اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ',c:1,s:'رواه مسلم'},
+  {t:'سُبْحَانَ اللَّهِ',c:33,s:'رواه مسلم'},{t:'الْحَمْدُ لِلَّهِ',c:33,s:'رواه مسلم'},{t:'اللَّهُ أَكْبَرُ',c:33,s:'رواه مسلم'},
+  {t:'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',c:1,s:'تمام المائة — رواه مسلم'}],
+ 'النوم':[
+  {t:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',c:1,s:'رواه البخاري'},
+  {t:'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ',c:3,s:'رواه أبو داود والترمذي'}]
 };
-
-const state = {
-  surahs: [], cur: null, data: null,
-  reciter: store.get('reciter', 'ar.alafasy'),
-  tafsir: store.get('tafsir', false),
-  fs: store.get('fs', 34),
-  playing: -1, tab: 'surahs', cache: {}
-};
-
-const toAr = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-const norm = s => s.replace(/[\u064B-\u065F\u0670\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').trim();
-const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-const HADITHS = [{"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "من كانتِ الآخرةُ هَمَّهُ جعلَ اللَّهُ غناهُ في قلبِهِ وجمعَ لَه شملَهُ وأتتهُ الدُّنيا وَهيَ راغمة، ومن كانتِ الدُّنيا همَّهُ جعلَ اللَّهُ فقرَهُ بينَ عينيهِ وفرَّقَ عليهِ شملَهُ، ولم يأتِهِ منَ الدُّنيا إلَّا ما قُدِّرَ لَهُ"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم- فيما رواه عن الله -تبارك وتعالى-", "t": "إنَّ اللَّهَ تَبارَكَ وتَعالَى يقولُ لأهْلِ الجَنَّةِ: يا أهْلَ الجَنَّةِ، فيَقولونَ: لَبَّيْكَ رَبَّنا وسَعْدَيْكَ، فيَقولُ: هلْ رَضِيتُمْ؟ فيَقولونَ: وما لنا لا نَرْضَى وقدْ أعْطَيْتَنا ما لَمْ تُعْطِ أحَدًا مِن خَلْقِكَ؟ فيَقولُ: أنا أُعْطِيكُمْ أفْضَلَ مِن ذلكَ، قالوا: يا رَبِّ، وأَيُّ شَيءٍ أفْضَلُ مِن ذلكَ؟ فيَقولُ: أُحِلُّ علَيْكُم رِضْوانِي، فلا أسْخَطُ علَيْكُم بَعْدَهُ أبَدًا"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "يقولُ اللَّهُ عَزَّ وَجَلَّ: مَن جَاءَ بالحَسَنَةِ فَلَهُ عَشْرُ أَمْثَالِهَا وَأَزِيدُ، وَمَن جَاءَ بالسَّيِّئَةِ فَجَزَاؤُهُ سَيِّئَةٌ مِثْلُهَا، أَوْ أَغْفِرُ وَمَن تَقَرَّبَ مِنِّي شِبْرًا تَقَرَّبْتُ منه ذِرَاعًا، وَمَن تَقَرَّبَ مِنِّي ذِرَاعًا تَقَرَّبْتُ منه بَاعًا، وَمَن أَتَانِي يَمْشِي أَتَيْتُهُ هَرْوَلَةً، وَمَن لَقِيَنِي بقُرَابِ الأرْضِ خَطِيئَةً لا يُشْرِكُ بي شيئًا لَقِيتُهُ بمِثْلِهَا مَغْفِرَةً. وفي روايةٍ : بهذا الإسْنَادِ نَحْوَهُ، غيرَ أنَّهُ قالَ: فَلَهُ عَشْرُ أَمْثَالِهَا، أَوْ أَزِيدُ"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "عَجَبًا لأَمْرِ المُؤْمِنِ، إنَّ أمْرَهُ كُلَّهُ خَيْرٌ، وليسَ ذاكَ لأَحَدٍ إلَّا لِلْمُؤْمِنِ، إنْ أصابَتْهُ سَرَّاءُ شَكَرَ، فَكانَ خَيْرًا له، وإنْ أصابَتْهُ ضَرَّاءُ، صَبَرَ فَكانَ خَيْرًا له"}, {"i": "عن ابن عباس -رضيَ الله عنهما- قال", "t": "أتَتِ النَّبيَّ صلَّى اللهُ عليه وسلَّم امرأة فَقَالَتْ: إنِّي أُصْرَعُ، وإنِّي أتَكَشَّفُ، فَادْعُ اللَّهَ لِي، قَالَ: إنْ شِئْتِ صَبَرْتِ ولَكِ الجَنَّةُ، وإنْ شِئْتِ دَعَوْتُ اللَّهَ أنْ يُعَافِيَكِ، فَقَالَتْ: أصْبِرُ، فَقَالَتْ: إنِّي أتَكَشَّفُ، فَادْعُ اللَّهَ لي ألَّا أتَكَشَّفَ، فَدَعَا لَهَا"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "إن في الجنةِ لشجرةً يسيرُ الراكبُ في ظلّها مائةَ عامٍ لا يقطعُها واقرأوا إن شئتُم ﴿وَظِلٍّ مَمْدُودٍ وَمَاءٍ مَسْكُوبٍ﴾"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "لا تَدْخُلُونَ الجَنَّةَ حتَّى تُؤْمِنُوا، ولا تُؤْمِنُوا حتَّى تَحابُّوا، أوَلا أدُلُّكُمْ علَى شيءٍ إذا فَعَلْتُمُوهُ تَحابَبْتُمْ؟ أفْشُوا السَّلامَ بيْنَكُمْ"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "من أُعطِيَ حظَّه من الرِّفقِ فقد أُعطِيَ حظَّه من الخيرِ ومن حُرِمَ حظُّه من الرِّفقِ ؛ فقد حُرِمَ حظُّه من الخيرِ . أثقلٌ شيءٍ في ميزانِ المؤمنِ يومَ القيامةِ حُسنُ الخُلُقِ ، وإنَّ اللهَ لَيبغضُ الفاحشَ البذِيءَ"}, {"i": "قال الرّسول -صلّى الله عليه وسلّم-", "t": "إنَّ مِن أحبِّكم إليَّ وأقربِكُم منِّي مجلسًا يومَ القيامةِ أحاسنَكُم أخلاقًا ، وإنَّ مِن أبغضِكُم إليَّ وأبعدِكُم منِّي يومَ القيامةِ الثَّرثارونَ والمتشدِّقونَ والمتفَيهِقونَ، قالوا : يا رسولَ اللَّهِ، قد علِمنا الثَّرثارينَ والمتشدِّقينَ فما المتفَيهقونَ ؟ قالَ : المتَكَبِّرونَ"}];
-
-const ADHKAR = [{"h": "آية الكرسي", "n": 1, "src": "سورة البقرة، الآية ٢٥٥", "t": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ"}, {"h": "سورة الإخلاص", "n": 3, "src": "رواه أبو داود والترمذي", "t": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ. قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ"}, {"h": "سورة الفلق", "n": 3, "src": "رواه أبو داود والترمذي", "t": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ. قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ"}, {"h": "سورة الناس", "n": 3, "src": "رواه أبو داود والترمذي", "t": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ. قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ"}, {"h": "أصبحنا وأمسينا", "n": 1, "src": "رواه مسلم", "m": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ", "e": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ"}, {"h": "اللهم بك أصبحنا وأمسينا", "n": 1, "src": "رواه الترمذي", "m": "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ", "e": "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ"}, {"h": "سيد الاستغفار", "n": 1, "src": "رواه البخاري", "t": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ"}, {"h": "اللهم عافني", "n": 3, "src": "رواه أبو داود", "t": "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ"}, {"h": "بسم الله الذي لا يضر مع اسمه شيء", "n": 3, "src": "رواه أبو داود والترمذي", "t": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ"}, {"h": "الرضا بالله ربًّا", "n": 3, "src": "رواه أبو داود", "t": "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا"}, {"h": "دعاء العافية", "n": 1, "src": "رواه أبو داود وابن ماجه", "t": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي"}, {"h": "عالم الغيب والشهادة", "n": 1, "src": "رواه أبو داود والترمذي", "t": "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ"}, {"h": "يا حي يا قيوم", "n": 1, "src": "رواه الحاكم", "t": "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ"}, {"h": "أعوذ بكلمات الله التامات", "n": 3, "only": "e", "src": "رواه أحمد والترمذي", "t": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ"}, {"h": "سبحان الله وبحمده", "n": 100, "src": "رواه مسلم", "t": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ"}];
-
-const azTimes = n => n === 1 ? 'مرة واحدة' : n === 2 ? 'مرتان' : toAr(n) + (n <= 10 ? ' مرات' : ' مرة');
-function azState() {
-  const d = new Date().toISOString().slice(0, 10);
-  const s = store.get('az', null);
-  return s && s.d === d ? s : { d, m: {}, e: {} };
+function adhkar(){
+  const tabs=Object.keys(ADHKAR);let cur=tabs[0];
+  const draw=()=>{
+    app.innerHTML='<div class="sub">'+tabs.map(k=>`<button class="${k===cur?'on':''}" data-k="${k}">${k}</button>`).join('')+'</div>'+
+    ADHKAR[cur].map(d=>`<div class="z"><p>${esc(d.t).replace(/\n/g,'<br>')}</p><div class="src">${esc(d.s)}</div><button class="cnt" data-c="${d.c}" aria-label="عداد">التكرار: <b>${ar(d.c)}</b></button></div>`).join('');
+    app.querySelectorAll('.sub button').forEach(b=>b.onclick=()=>{cur=b.dataset.k;draw()});
+    app.querySelectorAll('.cnt').forEach(b=>b.onclick=()=>{let n=+b.dataset.c;if(n>0){b.dataset.c=--n;b.querySelector('b').textContent=n?ar(n):'تم ✓';if(!n)b.classList.add('done')}});
+  };draw();
 }
 
-const JUZ = [[1,1],[2,142],[2,253],[3,93],[4,24],[4,148],[5,82],[6,111],[7,88],[8,41],[9,93],[11,6],[12,53],[15,1],[17,1],[18,75],[21,1],[23,1],[25,21],[27,56],[29,46],[33,31],[36,28],[39,32],[41,47],[46,1],[51,31],[58,1],[67,1],[78,1]];
-
-const audio = new Audio();
-audio.preload = 'auto';
-
-let toastTimer;
-function toast(msg) {
-  const t = $('#toast');
-  t.textContent = msg; t.hidden = false;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (t.hidden = true), 2200);
+/* القرآن */
+let surahs=null;
+const idb={open(){return new Promise((ok,no)=>{const r=indexedDB.open('noor',1);r.onupgradeneeded=()=>r.result.createObjectStore('d');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})},
+ async get(k){const db=await this.open();return new Promise(ok=>{const q=db.transaction('d').objectStore('d').get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok(null)})},
+ async set(k,v){const db=await this.open();return new Promise((ok,no)=>{const t=db.transaction('d','readwrite');t.objectStore('d').put(v,k);t.oncomplete=ok;t.onerror=()=>no(t.error)})}};
+async function getData(k,local,remote){
+  try{const c=await idb.get(k);if(c)return c}catch(e){}
+  let d;try{d=await fetchJSON(local)}catch(e){d=await fetchJSON(remote)}
+  try{await idb.set(k,d)}catch(e){}
+  return d;
+}
+const loadHadith=()=>getData('hadith','data/hadith.json','https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-nawawi.json');
+async function loadQuran(){
+  if(surahs)return surahs;
+  surahs=(await getData('quran','data/quran.json','https://api.alquran.cloud/v1/quran/quran-uthmani')).data.surahs;
+  return surahs;
+}
+async function listSurahs(){
+  app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
+  try{await loadQuran()}catch(e){return fail()}
+  app.innerHTML='<input type="search" id="q" placeholder="ابحث باسم السورة أو رقمها" aria-label="بحث"><div class="grid" id="g"></div>';
+  const g=$('#g'),draw=q=>g.innerHTML=surahs.filter(s=>!q||s.name.includes(q)||String(s.number)===q).map(s=>`<a class="s" href="#/quran/${s.number}"><span class="n">${ar(s.number)}</span><span><b>${s.name}</b><small>${s.revelationType==='Meccan'?'مكية':'مدنية'} — ${ar(s.numberOfAyahs||s.ayahs.length)} آية</small></span></a>`).join('')||'<p class="msg">لا توجد نتائج</p>';
+  draw();$('#q').oninput=e=>draw(e.target.value.trim());
+}
+async function surah(n){
+  app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
+  let d;try{d=(await loadQuran()).find(x=>x.number==n);if(!d.ayahs)d=(await fetchJSON(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`)).data}catch(e){return fail()}
+  const fs=+store.get('fs')||1.9, mark=+(store.get('bm')||'').split('/')[1]||0, same=(store.get('bm')||'').split('/')[0]==n;
+  const body=d.ayahs.map(a=>{let t=a.text;if(a.numberInSurah===1&&n!=1)t=t.split(' ').slice(4).join(' ');
+    return `<span class="a ${same&&mark===a.numberInSurah?'mark':''}" data-n="${a.numberInSurah}">${t}<span class="end">﴿${ar(a.numberInSurah)}﴾</span></span>`}).join(' ');
+  app.innerHTML=`<div class="bar"><a href="#/quran">كل السور</a><b style="font-family:'Amiri Quran';font-size:1.5rem">${d.name}</b><span><button id="m">أ−</button> <button id="p">أ+</button></span></div>
+  <div class="page">${n!=1&&n!=9?'<div class="bsm">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>':''}<div class="mushaf" style="--fs:${fs}rem">${body}</div></div>
+  <div class="bar" style="margin-top:14px">${n>1?`<a href="#/quran/${n-1}">السورة السابقة</a>`:'<span></span>'}${n<114?`<a href="#/quran/${+n+1}">السورة التالية</a>`:'<span></span>'}</div>`;
+  const m=$('.mushaf');
+  m.onclick=e=>{const a=e.target.closest('.a');if(!a)return;m.querySelectorAll('.mark').forEach(x=>x.classList.remove('mark'));a.classList.add('mark');store.set('bm',n+'/'+a.dataset.n)};
+  const size=x=>{const v=Math.min(3.4,Math.max(1.2,(+store.get('fs')||1.9)+x));store.set('fs',v);m.style.setProperty('--fs',v+'rem')};
+  $('#m').onclick=()=>size(-.2);$('#p').onclick=()=>size(.2);scrollTo(0,0);
 }
 
-async function getJSON(url) {
-  // استخدم النسخة المحفوظة على الجهاز أولًا؛ لا تحتاج الشبكة إذا كانت البيانات موجودة.
-  try {
-    if ('caches' in window) {
-      const names = await caches.keys();
-      for (const name of names) {
-        if (!name.startsWith('noor-quran-data-')) continue;
-        const savedCache = await caches.open(name);
-        const saved = await savedCache.match(url);
-        if (saved) {
-          const localJson = await saved.json();
-          if (!localJson.code || localJson.code === 200) return localJson.data;
-        }
-      }
-    }
-  } catch (_) { /* جرّب الاتصال إذا لم تتوفر نسخة محلية */ }
-  // إذا لم توجد نسخة محلية، نزّلها واحفظها لاستخدامها لاحقًا دون إنترنت.
-  const r = await fetch(url);
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const j = await r.json();
-  if (j.code && j.code !== 200) throw new Error(j.status || 'API error');
-  try {
-    if ('caches' in window && r.url.startsWith(API)) {
-      const cache = await caches.open('noor-quran-data-v6');
-      await cache.put(url, new Response(JSON.stringify(j), {status: 200, headers: {'Content-Type':'application/json; charset=utf-8'}}));
-    }
-  } catch (_) { /* عدم توفر التخزين لا يمنع عرض البيانات المتصلة */ }
-  return j.data;
+/* الأحاديث: الأربعون النووية */
+async function hadith(){
+  app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
+  let d;try{d=await loadHadith()}catch(e){return fail()}
+  app.innerHTML='<input type="search" id="q" placeholder="ابحث في الأحاديث" aria-label="بحث"><div id="l"></div>';
+  const l=$('#l'),draw=q=>l.innerHTML=d.hadiths.filter(h=>!q||h.text.includes(q)).map(h=>`<div class="z h"><span class="num">الحديث ${ar(h.hadithnumber)} — الأربعون النووية</span><p>${esc(h.text)}</p></div>`).join('')||'<p class="msg">لا توجد نتائج</p>';
+  draw();$('#q').oninput=e=>draw(e.target.value.trim());
 }
 
-function showView(name) {
-  ['home', 'reader', 'results'].forEach(v => ($('#' + v).hidden = v !== name));
-  window.scrollTo({ top: 0 });
+/* مواقيت الصلاة (حساب محلي بدون إنترنت — طريقة الهيئة المصرية: فجر 19.5° وعشاء 17.5°) */
+/*PT*/
+const R=Math.PI/180,sin=x=>Math.sin(x*R),cos=x=>Math.cos(x*R),h24=x=>((x%24)+24)%24;
+function jdate(y,m,d){if(m<=2){y--;m+=12}const A=Math.floor(y/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5}
+function sun(jd){const d=jd-2451545,g=(357.529+.98560028*d)%360,q=(280.459+.98564736*d)%360,L=(q+1.915*sin(g)+.02*sin(2*g))%360,e=23.439-3.6e-7*d,RA=Math.atan2(cos(e)*sin(L),cos(L))/R/15;return{dec:Math.asin(sin(e)*sin(L))/R,eq:q/15-h24(RA)}}
+function times(date,loc){
+  const tz=-date.getTimezoneOffset()/60,jd=jdate(date.getFullYear(),date.getMonth()+1,date.getDate())-loc.lng/360,sn=sun(jd+.5),dec=sn.dec,lat=loc.lat;
+  const noon=h24(12+tz-loc.lng/15-sn.eq);
+  const a=alt=>Math.acos(Math.max(-1,Math.min(1,(sin(alt)-sin(lat)*sin(dec))/(cos(lat)*cos(dec)))))/R/15;
+  const asrAlt=Math.atan(1/(1+Math.tan(Math.abs(lat-dec)*R)))/R;
+  return{fajr:noon-a(-19.5),sunrise:noon-a(-.833),dhuhr:noon+.0333,asr:noon+a(asrAlt),maghrib:noon+a(-.833),isha:noon+a(-17.5)};
 }
-
-function goHome() {
-  stopAudio();
-  history.replaceState(null, '', location.pathname);
-  showView('home');
-  renderList();
-  updateContinue();
+/*ENDPT*/
+const CITIES={'القاهرة':[30.04,31.24],'الإسكندرية':[31.2,29.92],'المنصورة':[31.04,31.38],'طنطا':[30.79,31.0],'أسيوط':[27.18,31.18],'الأقصر':[25.7,32.64],'أسوان':[24.09,32.9],'مكة المكرمة':[21.42,39.83],'المدينة المنورة':[24.47,39.61],'الرياض':[24.71,46.68],'دبي':[25.2,55.27],'عمّان':[31.95,35.93]};
+const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظهر'],['asr','العصر'],['maghrib','المغرب'],['isha','العشاء']];
+const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
+const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
+let tick;
+async function playAdhan(test){try{const b=await idb.get('adhan');if(!b){if(test)alert('اختر ملف الأذان أولاً');return}await new Audio(URL.createObjectURL(b)).play()}catch(e){if(test)alert('تعذّر التشغيل، اضغط في الصفحة ثم أعد المحاولة')}}
+let played='';
+setInterval(()=>{if(store.get('adhan')!=='1')return;const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
+  for(const [id] of NAMES){if(id!=='sunrise'&&Math.round(t[id]*60)===c&&played!==n.toDateString()+id){played=n.toDateString()+id;playAdhan()}}},15000);
+function prayer(){
+  const loc=getLoc(),opts=Object.keys(CITIES).map(c=>`<option ${c===loc.n?'selected':''}>${c}</option>`).join('')+(CITIES[loc.n]?'':`<option selected>${loc.n}</option>`);
+  app.innerHTML=`<div class="bar"><select id="c" aria-label="المدينة">${opts}</select><button id="g">استخدم موقعي</button></div><div id="nx"></div><div class="page" id="pt" style="padding:0"></div>
+  <div class="z" style="margin-top:14px"><label><input type="checkbox" id="ad" ${store.get('adhan')==='1'?'checked':''}> تشغيل الأذان تلقائياً (الصفحة لازم تكون مفتوحة)</label><br><br>
+  <label>ملف الأذان: <input type="file" id="f" accept="audio/*"></label> <button class="cnt" id="t">تجربة الأذان</button><div class="src" id="fs"></div></div>
+  <p class="src">الحساب بطريقة الهيئة المصرية العامة للمساحة، بتوقيت جهازك. قد يختلف عن التقويم الرسمي بدقائق.</p>`;
+  $('#c').onchange=e=>{const c=e.target.value;store.set('loc',JSON.stringify({n:c,lat:CITIES[c][0],lng:CITIES[c][1]}));prayer()};
+  $('#g').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{store.set('loc',JSON.stringify({n:'موقعي',lat:p.coords.latitude,lng:p.coords.longitude}));prayer()},()=>alert('تعذّر تحديد الموقع')):alert('المتصفح لا يدعم تحديد الموقع');
+  $('#ad').onchange=e=>store.set('adhan',e.target.checked?'1':'0');
+  $('#t').onclick=()=>playAdhan(true);
+  idb.get('adhan').then(b=>$('#fs').textContent=b?'تم حفظ ملف الأذان على الجهاز.':'لم يتم اختيار ملف أذان بعد.').catch(()=>{});
+  $('#f').onchange=async e=>{const f=e.target.files[0];if(f){await idb.set('adhan',f);$('#fs').textContent='تم حفظ: '+f.name}};
+  const draw=()=>{const n=new Date(),t=times(n,loc),c=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
+    let nx=NAMES.findIndex(([id])=>t[id]*3600>c),left;
+    if(nx<0){nx=0;left=t.fajr*3600+86400-c}else left=t[NAMES[nx][0]]*3600-c;
+    const L=Math.max(0,Math.floor(left)),hh=String(Math.floor(L/3600)).padStart(2,'0'),mm=String(Math.floor(L%3600/60)).padStart(2,'0'),ss=String(L%60).padStart(2,'0');
+    $('#nx').textContent=`${NAMES[nx][1]} بعد ${ar(hh+':'+mm+':'+ss)}`;
+    $('#pt').innerHTML=NAMES.map(([id,nm],i)=>`<div class="pr ${i===nx?'nx':''}"><span>${nm}</span><span>${fmt(t[id])}</span></div>`).join('')};
+  draw();tick=setInterval(draw,1000);
 }
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+$('#off').onclick=async e=>{const b=e.target;b.textContent='جارٍ التنزيل…';try{await loadQuran();await loadHadith();b.textContent='جاهز أوفلاين ✓'}catch(x){b.textContent='فشل — تأكد من الإنترنت'}};
 
-async function loadSurahs() {
-  try {
-    state.surahs = await getJSON(`${API}/surah`);
-  } catch {
-    $('#list').innerHTML = '<p class="empty">تعذّر تحميل قائمة السور. تأكد من اتصال الإنترنت ثم أعد المحاولة.</p>';
-    return;
-  }
-  renderList();
+/* التوجيه */
+function route(){
+  const [,t='quran',n]=location.hash.split('/');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.t===t));
+  clearInterval(tick);if(t==='prayer')prayer();else if(t==='adhkar')adhkar();else if(t==='hadith')hadith();else if(n&&+n>=1&&+n<=114)surah(+n);else listSurahs();
 }
-
-function renderList(filter = '') {
-  const box = $('#list');
-  const f = norm(filter);
-  let html = '';
-  box.classList.toggle('hadith-list', ['hadith', 'morning', 'evening'].includes(state.tab));
-
-  if (state.tab === 'morning' || state.tab === 'evening') {
-    const k = state.tab === 'morning' ? 'm' : 'e';
-    const st = azState();
-    const items = ADHKAR.map((x, i) => ({ ...x, i })).filter(x => (!x.only || x.only === k) && (!f || norm(x[k] || x.t).includes(f)));
-    html = items.length ? '<div class="az-top"><span class="muted">اضغط على العدّاد تحت كل ذكر لتسجيل التكرار</span><button class="link-btn" data-az-reset>إعادة العدّ</button></div>' + items.map(x => {
-      const done = st[k][x.i] || 0, left = x.n - done;
-      return `
-      <article class="hadith dhikr ${left <= 0 ? 'done' : ''}">
-        <p class="h-intro">${esc(x.h)} · ${azTimes(x.n)}</p>
-        <p class="h-text">${esc(x[k] || x.t)}</p>
-        <div class="h-foot"><span class="h-no">${esc(x.src || '')}</span><button class="act ${left <= 0 ? 'on' : ''}" data-az="${x.i}">${left <= 0 ? '✓ تم' : toAr(done) + ' / ' + toAr(x.n)}</button></div>
-      </article>`;
-    }).join('') : '<p class="empty">لا يوجد ذكر بهذا النص.</p>';
-  }
-
-  if (state.tab === 'hadith') {
-    const hs = HADITHS.map((h, i) => ({ ...h, n: i + 1 })).filter(h => !f || norm(h.t).includes(f));
-    html = hs.length ? hs.map(h => `
-      <article class="hadith">
-        <p class="h-intro">${esc(h.i)}</p>
-        <p class="h-text">${esc(h.t)}</p>
-        <div class="h-foot"><span class="h-no">حديث ${toAr(h.n)}</span><button class="act" data-copy-h="${h.n - 1}">نسخ</button></div>
-      </article>`).join('') : '<p class="empty">لا يوجد حديث بهذا النص.</p>';
-  }
-
-  if (state.tab === 'surahs') {
-    const items = state.surahs.filter(s => !f || norm(s.name).includes(f) || s.englishName.toLowerCase().includes(f.toLowerCase()) || String(s.number) === f);
-    html = items.map(s => `
-      <button class="card" data-s="${s.number}">
-        <span class="num"><span>${toAr(s.number)}</span></span>
-        <span class="card-body">
-          <span class="card-name">${esc(s.name.replace('سُورَةُ ', '').replace('سورة ', ''))}</span><br>
-          <span class="card-meta">${s.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} · ${toAr(s.numberOfAyahs)} آية</span>
-        </span>
-        <span class="card-end">${esc(s.englishName)}</span>
-      </button>`).join('');
-    if (!items.length) html = '<p class="empty">لا توجد سورة بهذا الاسم. اضغط Enter للبحث في الآيات.</p>';
-  }
-
-  if (state.tab === 'juz') {
-    html = JUZ.map(([s, a], i) => {
-      const sr = state.surahs[s - 1];
-      return `
-      <button class="card" data-s="${s}" data-a="${a}">
-        <span class="num"><span>${toAr(i + 1)}</span></span>
-        <span class="card-body">
-          <span class="card-name">الجزء ${toAr(i + 1)}</span><br>
-          <span class="card-meta">يبدأ من ${sr ? esc(sr.name.replace('سورة ', '')) : ''} · آية ${toAr(a)}</span>
-        </span>
-      </button>`;
-    }).join('');
-  }
-
-  if (state.tab === 'bookmarks') {
-    const bms = store.get('bm', []);
-    html = bms.length ? bms.map(b => `
-      <button class="card" data-s="${b.s}" data-a="${b.a}">
-        <span class="num"><span>${toAr(b.a)}</span></span>
-        <span class="card-body">
-          <span class="card-name">${esc(b.name)}</span><br>
-          <span class="card-meta">${esc(b.text.split(' ').slice(0, 7).join(' '))}…</span>
-        </span>
-      </button>`).join('') : '<p class="empty">لا توجد آيات محفوظة بعد. اضغط «☆ حفظ» تحت أي آية.</p>';
-  }
-
-  box.innerHTML = html;
-}
-
-async function openSurah(n, a = 1, autoplay = false) {
-  stopAudio(false);
-  showView('reader');
-  history.replaceState(null, '', `#s${n}${a > 1 ? ':' + a : ''}`);
-  $('#ayahs').innerHTML = '<div class="loader">جارٍ تحميل السورة…</div>';
-  $('#sTitle').textContent = '';
-  $('#sMeta').textContent = '';
-
-  try {
-    const key = `${n}|${state.reciter}`;
-    let d = state.cache[key];
-    if (!d) {
-      d = await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar,${state.reciter}`);
-      state.cache[key] = d;
-    }
-    state.cur = n;
-    state.data = d;
-    renderSurah(a);
-    store.set('last', { s: n, a });
-    if (autoplay) play(a - 1);
-  } catch {
-    $('#ayahs').innerHTML = '<p class="empty">تعذّر تحميل السورة. تحقق من الاتصال وأعد المحاولة.</p>';
-  }
-}
-
-function ayahText(n, ay) {
-  let t = ay.text;
-  if (n !== 1 && n !== 9 && ay.numberInSurah === 1) t = t.split(' ').slice(4).join(' ');
-  return t;
-}
-
-function renderSurah(focusAyah = 1) {
-  const [ar, tf] = state.data;
-  const n = ar.number;
-  const bms = store.get('bm', []);
-  const last = store.get('last', null);
-
-  $('#sTitle').textContent = ar.name.replace('سُورَةُ ', 'سورة ');
-  $('#sMeta').textContent = `${ar.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} · ${toAr(ar.numberOfAyahs)} آية · ${ar.englishName}`;
-  $('#bismillah').hidden = (n === 1 || n === 9);
-  document.title = `${ar.name.replace('سُورَةُ ', 'سورة ')} | نور القرآن`;
-
-  $('#ayahs').innerHTML = ar.ayahs.map((ay, i) => {
-    const saved = bms.some(b => b.s === n && b.a === ay.numberInSurah);
-    const isLast = last && last.s === n && last.a === ay.numberInSurah;
-    return `
-    <article class="ayah ${isLast ? 'last' : ''}" id="a${ay.numberInSurah}" data-i="${i}">
-      <div class="atext" data-act="mark">${esc(ayahText(n, ay))}<span class="amark">﴿${toAr(ay.numberInSurah)}﴾</span></div>
-      ${state.tafsir ? `<div class="tafsir">${esc(tf.ayahs[i].text)}</div>` : ''}
-      <div class="acts">
-        <button class="act" data-act="play">▶ استماع</button>
-        <button class="act ${saved ? 'on' : ''}" data-act="bm">${saved ? '★ محفوظة' : '☆ حفظ'}</button>
-        <button class="act" data-act="copy">نسخ</button>
-      </div>
-    </article>`;
-  }).join('');
-
-  $('#prevSurah').style.visibility = n <= 1 ? 'hidden' : 'visible';
-  $('#nextSurah').style.visibility = n >= 114 ? 'hidden' : 'visible';
-
-  if (focusAyah > 1) {
-    setTimeout(() => {
-      const el = $('#a' + focusAyah);
-      if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }, 120);
-  }
-}
-
-$('#ayahs').addEventListener('click', e => {
-  const target = e.target.closest('[data-act]');
-  if (!target) return;
-  const ayEl = target.closest('.ayah');
-  const i = +ayEl.dataset.i;
-  const ay = state.data[0].ayahs[i];
-  const n = state.cur;
-
-  switch (target.dataset.act) {
-    case 'play': play(i); break;
-    case 'mark':
-      store.set('last', { s: n, a: ay.numberInSurah });
-      $$('.ayah.last').forEach(el => el.classList.remove('last'));
-      ayEl.classList.add('last');
-      toast('تم حفظ موضع القراءة');
-      break;
-    case 'bm': {
-      let bms = store.get('bm', []);
-      const idx = bms.findIndex(b => b.s === n && b.a === ay.numberInSurah);
-      if (idx > -1) {
-        bms.splice(idx, 1);
-        target.classList.remove('on'); target.textContent = '☆ حفظ';
-        toast('أُزيلت من المحفوظات');
-      } else {
-        bms.unshift({ s: n, a: ay.numberInSurah, name: state.data[0].name.replace('سُورَةُ ', 'سورة '), text: ayahText(n, ay) });
-        target.classList.add('on'); target.textContent = '★ محفوظة';
-        toast('تم الحفظ');
-      }
-      store.set('bm', bms);
-      break;
-    }
-    case 'copy': {
-      const txt = `${ayahText(n, ay)} ﴿${toAr(ay.numberInSurah)}﴾ — ${state.data[0].name.replace('سُورَةُ ', 'سورة ')}`;
-      navigator.clipboard.writeText(txt).then(() => toast('تم النسخ')).catch(() => toast('تعذّر النسخ'));
-      break;
-    }
-  }
-});
-
-function play(i) {
-  const ayahs = state.data[2].ayahs;
-  if (i < 0 || i >= ayahs.length) return;
-  state.playing = i;
-  audio.src = ayahs[i].audio;
-  audio.play().catch(() => toast('تعذّر تشغيل الصوت'));
-
-  $$('.ayah.active').forEach(el => el.classList.remove('active'));
-  const el = $('#a' + ayahs[i].numberInSurah);
-  if (el) { el.classList.add('active'); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-
-  $('#player').hidden = false;
-  $('#pTitle').textContent = state.data[0].name.replace('سُورَةُ ', 'سورة ');
-  $('#pSub').textContent = `آية ${toAr(ayahs[i].numberInSurah)} · ${$('#reciter').selectedOptions[0].textContent}`;
-  store.set('last', { s: state.cur, a: ayahs[i].numberInSurah });
-}
-
-function stopAudio(hidePlayer = true) {
-  audio.pause();
-  audio.removeAttribute('src');
-  state.playing = -1;
-  $$('.ayah.active').forEach(el => el.classList.remove('active'));
-  $('#pPlay').textContent = '▶';
-  $('#pSeek').value = 0;
-  if (hidePlayer) $('#player').hidden = true;
-}
-
-audio.addEventListener('play', () => ($('#pPlay').textContent = '❚❚'));
-audio.addEventListener('pause', () => ($('#pPlay').textContent = '▶'));
-audio.addEventListener('timeupdate', () => {
-  if (audio.duration) $('#pSeek').value = (audio.currentTime / audio.duration) * 100;
-});
-audio.addEventListener('ended', () => {
-  const total = state.data[2].ayahs.length;
-  if (state.playing + 1 < total) play(state.playing + 1);
-  else if (state.cur < 114) openSurah(state.cur + 1, 1, true);
-  else stopAudio();
-});
-
-$('#pPlay').onclick = () => {
-  if (!audio.src) return state.data && play(0);
-  audio.paused ? audio.play() : audio.pause();
-};
-$('#pNext').onclick = () => play(state.playing + 1);
-$('#pPrev').onclick = () => play(Math.max(0, state.playing - 1));
-$('#pClose').onclick = () => stopAudio();
-$('#pSeek').oninput = e => { if (audio.duration) audio.currentTime = (e.target.value / 100) * audio.duration; };
-$('#playSurah').onclick = () => play(0);
-
-$('#reciter').value = state.reciter;
-if ($('#reciter').value !== state.reciter) { state.reciter = 'ar.alafasy'; $('#reciter').value = state.reciter; store.set('reciter', state.reciter); }
-$('#reciter').onchange = async e => {
-  state.reciter = e.target.value;
-  store.set('reciter', state.reciter);
-  const wasPlaying = state.playing;
-  const cur = state.cur;
-  const ayNum = wasPlaying >= 0 ? state.data[0].ayahs[wasPlaying].numberInSurah : 1;
-  await openSurah(cur, ayNum, wasPlaying >= 0);
-};
-
-document.documentElement.style.setProperty('--fs', state.fs + 'px');
-$('#fontSize').value = state.fs;
-$('#fontSize').oninput = e => {
-  state.fs = +e.target.value;
-  document.documentElement.style.setProperty('--fs', state.fs + 'px');
-  store.set('fs', state.fs);
-};
-
-$('#tafsirToggle').checked = state.tafsir;
-$('#tafsirToggle').onchange = e => {
-  state.tafsir = e.target.checked;
-  store.set('tafsir', state.tafsir);
-  if (state.data) {
-    const keep = state.playing >= 0 ? state.data[0].ayahs[state.playing].numberInSurah : 0;
-    renderSurah();
-    if (keep) { const el = $('#a' + keep); if (el) el.classList.add('active'); }
-  }
-};
-
-$('#prevSurah').onclick = () => openSurah(state.cur - 1);
-$('#nextSurah').onclick = () => openSurah(state.cur + 1);
-$$('[data-back]').forEach(b => (b.onclick = goHome));
-$('#brand').onclick = e => { e.preventDefault(); $('#q').value = ''; state.tab = 'surahs'; setTab('surahs'); goHome(); };
-
-function setTab(t) {
-  state.tab = t;
-  $$('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
-  renderList($('#q').value);
-}
-$$('.tab').forEach(b => (b.onclick = () => setTab(b.dataset.tab)));
-$('#goBookmarks').onclick = () => { goHome(); setTab('bookmarks'); $('#list').scrollIntoView({ behavior: 'smooth' }); };
-
-$('#list').addEventListener('click', e => {
-  const cb = e.target.closest('[data-copy-h]');
-  if (cb) {
-    const h = HADITHS[+cb.dataset.copyH];
-    navigator.clipboard.writeText(`${h.i}: «${h.t}»`).then(() => toast('تم النسخ')).catch(() => toast('تعذّر النسخ'));
-    return;
-  }
-  const k = state.tab === 'morning' ? 'm' : 'e';
-  const az = e.target.closest('[data-az]');
-  if (az) {
-    const i = +az.dataset.az, st = azState();
-    st[k][i] = Math.min(ADHKAR[i].n, (st[k][i] || 0) + 1);
-    store.set('az', st);
-    renderList($('#q').value);
-    return;
-  }
-  if (e.target.closest('[data-az-reset]')) {
-    const st = azState();
-    st[k] = {};
-    store.set('az', st);
-    renderList($('#q').value);
-    toast('تمت إعادة العدّ');
-    return;
-  }
-  const c = e.target.closest('.card');
-  if (c) openSurah(+c.dataset.s, +(c.dataset.a || 1));
-});
-
-$('#q').addEventListener('input', e => {
-  if (!['surahs', 'hadith', 'morning', 'evening'].includes(state.tab)) setTab('surahs');
-  if (!$('#home').hidden) renderList(e.target.value);
-});
-
-$('#q').addEventListener('keydown', async e => {
-  if (e.key !== 'Enter') return;
-  const q = e.target.value.trim();
-  if (q.length < 2) return toast('اكتب كلمتين على الأقل');
-  showView('results');
-  $('#resultsTitle').textContent = `نتائج البحث عن «${q}»`;
-  $('#resultsList').innerHTML = '<div class="loader">جارٍ البحث…</div>';
-  try {
-    const d = await getJSON(`${API}/search/${encodeURIComponent(q)}/all/quran-simple`);
-    const total = d.count;
-    const rx = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'g');
-    $('#resultsTitle').textContent = `«${q}» — ${toAr(total)} نتيجة${total > 60 ? ' (أول ٦٠)' : ''}`;
-    $('#resultsList').innerHTML = d.matches.slice(0, 60).map(m => `
-      <button class="result" data-s="${m.surah.number}" data-a="${m.numberInSurah}">
-        <div class="rt">${esc(m.text).replace(rx, '<mark>$1</mark>')}</div>
-        <div class="rr">${esc(m.surah.name)} · آية ${toAr(m.numberInSurah)}</div>
-      </button>`).join('');
-  } catch {
-    $('#resultsList').innerHTML = '<p class="empty">لم نعثر على نتائج. جرّب كلمة أخرى (بدون تشكيل).</p>';
-    $('#resultsTitle').textContent = `لا نتائج لـ «${q}»`;
-  }
-});
-$('#resultsList').addEventListener('click', e => {
-  const r = e.target.closest('.result');
-  if (r) openSurah(+r.dataset.s, +r.dataset.a);
-});
-
-async function loadDaily() {
-  const now = new Date();
-  const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
-  const num = ((doy * 37 + now.getFullYear()) % 6236) + 1;
-  try {
-    const d = await getJSON(`${API}/ayah/${num}/editions/quran-uthmani,ar.muyassar`);
-    const [a, t] = d;
-    const txt = a.numberInSurah === 1 && a.surah.number !== 1 && a.surah.number !== 9 ? a.text.split(' ').slice(4).join(' ') : a.text;
-    $('#daily').innerHTML = `
-      <p class="verse">${esc(txt)} ﴿${toAr(a.numberInSurah)}﴾</p>
-      <p class="ref">${esc(a.surah.name)} · آية ${toAr(a.numberInSurah)}</p>
-      <p class="tf">${esc(t.text)}</p>`;
-    $('#daily').style.cursor = 'pointer';
-    $('#daily').onclick = () => openSurah(a.surah.number, a.numberInSurah);
-  } catch {
-    $('#daily').innerHTML = '<p class="verse">﴿ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ ﴾</p><p class="ref">سورة الرعد · آية ٢٨</p>';
-  }
-}
-
-function updateContinue() {
-  const last = store.get('last', null);
-  const btn = $('#continueBtn');
-  if (last && state.surahs.length) {
-    const s = state.surahs[last.s - 1];
-    btn.hidden = false;
-    btn.textContent = `أكمل: ${s.name} · آية ${toAr(last.a)}`;
-    btn.onclick = () => openSurah(last.s, last.a);
-  }
-}
-$('#randomBtn').onclick = () => openSurah(Math.floor(Math.random() * 114) + 1);
-
-const PRAYERS = [['Fajr', 'الفجر'], ['Sunrise', 'الشروق'], ['Dhuhr', 'الظهر'], ['Asr', 'العصر'], ['Maghrib', 'المغرب'], ['Isha', 'العشاء']];
-
-function fmt12(t) {
-  let [h, m] = t.slice(0, 5).split(':').map(Number);
-  const suf = h >= 12 ? 'م' : 'ص';
-  h = h % 12 || 12;
-  return `${toAr(h)}:${toAr(String(m).padStart(2, '0'))} ${suf}`;
-}
-
-async function loadPrayer(coords) {
-  try {
-    const url = coords
-      ? `https://api.aladhan.com/v1/timings?latitude=${coords.latitude}&longitude=${coords.longitude}&method=5`
-      : 'https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5';
-    const r = await fetch(url);
-    const t = (await r.json()).data.timings;
-    const nowM = new Date().getHours() * 60 + new Date().getMinutes();
-    const mins = PRAYERS.map(([k]) => { const [h, m] = t[k].split(':').map(Number); return h * 60 + m; });
-    let next = mins.findIndex(m => m > nowM);
-    if (next === -1) next = 0;
-    $('#prayerList').innerHTML = PRAYERS.map(([k, ar], i) =>
-      `<li class="${i === next ? 'next' : ''}"><span>${ar}</span><span>${fmt12(t[k])}</span></li>`).join('');
-    $('#prayerPlace').textContent = coords ? 'حسب موقعك الحالي' : 'القاهرة، مصر';
-  } catch {
-    $('#prayerList').innerHTML = '<li class="muted">تعذّر تحميل المواقيت</li>';
-  }
-}
-$('#geoBtn').onclick = () => {
-  if (!navigator.geolocation) return toast('المتصفح لا يدعم تحديد الموقع');
-  navigator.geolocation.getCurrentPosition(
-    p => loadPrayer(p.coords),
-    () => toast('لم يتم السماح بتحديد الموقع')
-  );
-};
-
-/* ================= المصحف ================= */
-/* التنقل بين الصفحات بالسحب فقط، دون أزرار السابق والتالي. */
-const mushafSwipeOnlyStyle = document.createElement('style');
-mushafSwipeOnlyStyle.textContent = '#mPrev,#mNext{display:none!important}';
-document.head.appendChild(mushafSwipeOnlyStyle);
-const _showView = showView;
-showView = function (name) {
-  _showView(name);
-  $('#mushaf').hidden = name !== 'mushaf';
-};
-
-const mState = { page: store.get('mp', 1), cache: {} };
-
-function fillMushafSurahs() {
-  const sel = $('#mSurah');
-  if (sel.options.length > 1 || !state.surahs.length) return;
-  state.surahs.forEach(s => {
-    const o = document.createElement('option');
-    o.value = s.number;
-    o.textContent = `${toAr(s.number)}. ${s.name.replace('سُورَةُ ', '').replace('سورة ', '')}`;
-    sel.appendChild(o);
-  });
-}
-
-async function openMushaf(p = mState.page) {
-  p = Math.min(604, Math.max(1, parseInt(p) || 1));
-  stopAudio();
-  // لا نعيد تمرير الشاشة لأعلى عند كل تقليب؛ نمرر للأعلى فقط عند فتح المصحف أول مرة.
-  if ($('#mushaf').hidden) showView('mushaf');
-  mState.page = p;
-  store.set('mp', p);
-  history.replaceState(null, '', `#m${p}`);
-  fillMushafSurahs();
-  $('#mPage').innerHTML = '<div class="loader">جارٍ تحميل الصفحة…</div>';
-  try {
-    let d = mState.cache[p];
-    if (!d) { d = await getJSON(`${API}/page/${p}/quran-uthmani`); mState.cache[p] = d; }
-    if (mState.page !== p) return;
-    renderMushaf(d, p);
-  } catch {
-    $('#mPage').innerHTML = '<p class="empty">تعذّر تحميل الصفحة. تحقق من الاتصال وأعد المحاولة.</p>';
-  }
-  if (p < 604 && !mState.cache[p + 1]) {
-    getJSON(`${API}/page/${p + 1}/quran-uthmani`).then(x => (mState.cache[p + 1] = x)).catch(() => {});
-  }
-}
-
-function renderMushaf(d, p) {
-  const ays = d.ayahs;
-  const first = ays[0];
-  let body = '', run = '';
-  const flush = () => { if (run) { body += `<p class="m-run">${run}</p>`; run = ''; } };
-
-  ays.forEach(ay => {
-    const n = ay.surah.number;
-    let txt = ay.text;
-    if (ay.numberInSurah === 1) {
-      flush();
-      body += `<div class="m-surah">${esc(ay.surah.name)}</div>`;
-      if (n !== 1 && n !== 9) {
-        body += '<div class="m-bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
-        txt = txt.split(' ').slice(4).join(' ');
-      }
-    }
-    run += `${esc(txt)} <span class="amark">﴿${toAr(ay.numberInSurah)}﴾</span> `;
-  });
-  flush();
-
-  $('#mPage').innerHTML = `
-    <div class="m-top"><span>${esc(first.surah.name)}</span><span>الجزء ${toAr(first.juz)}</span></div>
-    <div class="m-body">${body}</div>
-    <div class="m-foot"><span>${toAr(p)}</span></div>`;
-  document.title = `${first.surah.name} · صفحة ${toAr(p)} | نور القرآن`;
-}
-
-$('#goMushaf').onclick = () => openMushaf();
-$('#mushafBtn').onclick = () => openMushaf();
-$('#toMushaf').onclick = () => {
-  const pg = state.data && state.data[0].ayahs[0].page;
-  openMushaf(pg || 1);
-};
-$('#mSurah').onchange = async e => {
-  const s = e.target.value;
-  if (!s) return;
-  try {
-    const a = await getJSON(`${API}/ayah/${s}:1`);
-    openMushaf(a.page);
-  } catch { toast('تعذّر الانتقال للسورة'); }
-  e.target.value = '';
-};
-
-function mFont(delta) {
-  state.fs = Math.min(64, Math.max(22, state.fs + delta));
-  document.documentElement.style.setProperty('--fs', state.fs + 'px');
-  $('#fontSize').value = state.fs;
-  store.set('fs', state.fs);
-}
-$('#mBig').onclick = () => mFont(2);
-$('#mSmall').onclick = () => mFont(-2);
-
-document.addEventListener('keydown', e => {
-  if ($('#mushaf').hidden) return;
-  if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-  if (e.key === 'ArrowRight') openMushaf(mState.page + 1);
-  if (e.key === 'ArrowLeft') openMushaf(mState.page - 1);
-});
-
-let tx = 0, ty = 0;
-$('#mPage').addEventListener('touchstart', e => {
-  if (e.touches.length !== 1) return;
-  tx = e.touches[0].clientX;
-  ty = e.touches[0].clientY;
-}, { passive: true });
-$('#mPage').addEventListener('touchend', e => {
-  if (e.changedTouches.length !== 1) return;
-  const dx = e.changedTouches[0].clientX - tx;
-  const dy = e.changedTouches[0].clientY - ty;
-  // تقليب أفقي فقط؛ السحب الرأسي يظل للتمرير الطبيعي داخل الصفحة.
-  if (Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
-  // المصحف عربي: السحب لليمين ينقل للصفحة التالية (من الفاتحة إلى البقرة).
-  if (dx > 0 && mState.page < 604) openMushaf(mState.page + 1);
-  else if (dx < 0 && mState.page > 1) openMushaf(mState.page - 1);
-}, { passive: true });
-
-(async function init() {
-  loadDaily();
-  loadPrayer();
-  await loadSurahs();
-  updateContinue();
-  const m = location.hash.match(/^#s(\d+)(?::(\d+))?$/);
-  if (m && +m[1] >= 1 && +m[1] <= 114) openSurah(+m[1], +(m[2] || 1));
-  const mm = location.hash.match(/^#m(\d+)$/);
-  if (mm) openMushaf(+mm[1]);
-})();
-
-document.addEventListener('keydown', e => {
-  if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-  if (e.code === 'Space' && !$('#player').hidden) { e.preventDefault(); $('#pPlay').click(); }
-  if (e.key === 'ArrowLeft' && !$('#player').hidden) $('#pNext').click();
-  if (e.key === 'ArrowRight' && !$('#player').hidden) $('#pPrev').click();
-});
-
-if ('mediaSession' in navigator) {
-  navigator.mediaSession.setActionHandler('nexttrack', () => $('#pNext').click());
-  navigator.mediaSession.setActionHandler('previoustrack', () => $('#pPrev').click());
-}
-
-// تنزيل مسبق لنص القرآن والتفسير وصفحات المصحف، مع إظهار تقدم واضح.
-const OFFLINE_DATA_CACHE = 'noor-quran-data-v6';
-const offlineDownloadBtn = $('#downloadOfflineBtn');
-const offlineDownloadText = $('#offlineDownloadText');
-const offlineDownloadProgress = $('#offlineDownloadProgress');
-const offlineDownloadBox = $('#offlineDownloadBox');
-const OFFLINE_COMPLETE_MARKER = new URL('/__noor_offline_download_complete_v1__', location.origin).href;
-let offlineDownloadRunning = false;
-
-// إذا كان المحتوى قد اكتمل تنزيله على هذا الجهاز سابقًا، أخفِ صندوق التحميل عند فتح الموقع مجددًا.
-(async function restoreOfflineDownloadState() {
-  try {
-    if (!('caches' in window)) return;
-    const cache = await caches.open(OFFLINE_DATA_CACHE);
-    const marker = await cache.match(OFFLINE_COMPLETE_MARKER);
-    if (marker) {
-      // لا نخفي زر التحميل إلا إذا كانت البيانات الأساسية وصفحات المصحف موجودة فعلًا.
-      const required = [`${API}/surah`];
-      for (let n = 1; n <= 114; n++) required.push(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar,${state.reciter}`);
-      for (let page = 1; page <= 604; page++) required.push(`${API}/page/${page}/quran-uthmani`);
-      const checks = await Promise.all(required.map(url => cache.match(url)));
-      if (checks.every(Boolean)) {
-        if (offlineDownloadBox) offlineDownloadBox.hidden = true;
-      } else {
-        await cache.delete(OFFLINE_COMPLETE_MARKER);
-      }
-    }
-  } catch (_) { /* اترك الزر ظاهرًا إذا تعذّر التحقق من التخزين */ }
-})();
-
-async function downloadOfflineContent() {
-  if (offlineDownloadRunning) return;
-  if (!navigator.onLine) {
-    toast('اتصل بالإنترنت أولًا لبدء التحميل');
-    offlineDownloadText.textContent = 'لا يوجد اتصال بالإنترنت. اتصل بالشبكة ثم حاول مرة أخرى.';
-    return;
-  }
-  if (!('caches' in window)) {
-    toast('المتصفح لا يدعم حفظ المحتوى دون إنترنت');
-    return;
-  }
-  offlineDownloadRunning = true;
-  offlineDownloadBtn.disabled = true;
-  offlineDownloadBtn.textContent = '⏳ جارٍ التحميل…';
-  offlineDownloadProgress.hidden = false;
-  offlineDownloadProgress.max = 719;
-  offlineDownloadProgress.value = 0;
-  let done = 0;
-  const cache = await caches.open(OFFLINE_DATA_CACHE);
-  const update = (label) => {
-    offlineDownloadProgress.value = done;
-    offlineDownloadText.textContent = `${label} — ${Math.round(done / 719 * 100)}٪ (${done} من 719)`;
-  };
-  try {
-    // احفظ قائمة السور أولًا، ثم بيانات كل سورة (النص العثماني والتفسير الميسر).
-    const urls = [`${API}/surah`];
-    for (let n = 1; n <= 114; n++) urls.push(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar,${state.reciter}`);
-    // صفحات المصحف كما يستخدمها عارض الصفحات داخل الموقع.
-    for (let p = 1; p <= 604; p++) urls.push(`${API}/page/${p}/quran-uthmani`);
-    for (let i = 0; i < urls.length; i++) {
-      if (!navigator.onLine) throw new Error('انقطع الاتصال بالإنترنت');
-      const url = urls[i];
-      const response = await fetch(url, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`تعذر تنزيل المحتوى (HTTP ${response.status})`);
-      const copy = response.clone();
-      // تأكد من أن الاستجابة من واجهة القرآن صالحة قبل حفظها.
-      const body = await response.json();
-      if (body.code && body.code !== 200) throw new Error(body.status || 'فشل تحميل بيانات القرآن');
-      await cache.put(url, new Response(JSON.stringify(body), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json; charset=utf-8' }
-      }));
-      done++;
-      const label = i === 0 ? 'حفظ قائمة السور' : i <= 114 ? 'تحميل نص القرآن والتفسير' : 'تحميل صفحات المصحف';
-      update(label);
-      // هدنة قصيرة لتخفيف الضغط على واجهة البيانات.
-      if (done % 10 === 0) await new Promise(resolve => setTimeout(resolve, 120));
-    }
-    offlineDownloadProgress.value = 719;
-    offlineDownloadText.textContent = 'اكتمل حفظ نص القرآن والتفسير وصفحات المصحف على هذا الجهاز. الأحاديث والأذكار مضمّنة محليًا، أما الصوتيات فتحتاج إلى الإنترنت.';
-    offlineDownloadBtn.textContent = '✓ تم تحميل المحتوى';
-    // خزّن علامة الاكتمال حتى لا يظهر زر التحميل مرة أخرى عند إعادة فتح الموقع على الجهاز نفسه.
-    await cache.put(OFFLINE_COMPLETE_MARKER, new Response('complete', {
-      status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-    }));
-    if (offlineDownloadBox) offlineDownloadBox.hidden = true;
-    toast('تم حفظ بيانات القرآن؛ الأحاديث والأذكار موجودة محليًا، والصوتيات أونلاين');
-  } catch (err) {
-    offlineDownloadText.textContent = `لم يكتمل التحميل عند ${done} من 719. ${err && err.message ? err.message : 'حدث خطأ'}. اضغط الزر للمحاولة مرة أخرى.`;
-    offlineDownloadBtn.textContent = '↻ استكمال / إعادة المحاولة';
-    toast('لم يكتمل التحميل؛ يمكنك المحاولة مرة أخرى');
-  } finally {
-    offlineDownloadRunning = false;
-    offlineDownloadBtn.disabled = false;
-  }
-}
-offlineDownloadBtn.addEventListener('click', downloadOfflineContent);
-
-// تسجيل عامل الخدمة لحفظ ملفات الموقع وبيانات القرآن التي تُفتح أثناء الاتصال.
-function updateOfflineStatus() {
-  const el = $('#offlineStatus');
-  if (!el) return;
-  el.textContent = navigator.onLine
-    ? 'متصل بالإنترنت — سيتم حفظ الصفحات والبيانات التي تفتحها لتعمل لاحقًا دون اتصال.'
-    : 'أنت دون اتصال — ستعمل البيانات المحفوظة سابقًا؛ افتح المحتوى أثناء الاتصال لحفظه مسبقًا.';
-  el.style.color = navigator.onLine ? '#d4af37' : '#ffcc80';
-}
-window.addEventListener('online', updateOfflineStatus);
-window.addEventListener('offline', updateOfflineStatus);
-updateOfflineStatus();
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
-  window.addEventListener('load', async () => {
-    const el = $('#offlineStatus');
-    try {
-      const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-      await navigator.serviceWorker.ready;
-      if (el) el.textContent = '';
-      console.info('Noor Quran service worker ready:', registration.scope);
-    } catch (err) {
-      console.error('Noor Quran service worker registration failed:', err);
-      if (el) el.textContent = 'تعذّر تفعيل وضع عدم الاتصال (' + (err && err.message ? err.message : 'خطأ غير معروف') + '). تأكد أن sw.js موجود بجذر الموقع وأنه مرفوع كملف JavaScript.';
-    }
-  });
-} else {
-  const el = $('#offlineStatus');
-  if (el) el.textContent = 'المتصفح الحالي لا يدعم وضع عدم الاتصال أو أن الصفحة ليست على HTTPS.';
-}
-
-// زر تبديل المظهر
-const themeToggle = document.getElementById('themeToggle');
-function refreshThemeButton(){
-  const light = document.documentElement.dataset.theme === 'light';
-  if(themeToggle){ themeToggle.textContent = light ? '🌙' : '☀️'; themeToggle.title = light ? 'التبديل إلى الوضع الليلي' : 'التبديل إلى الوضع النهاري'; }
-  const metaTheme = document.querySelector('meta[name="theme-color"]');
-  if(metaTheme) metaTheme.content = light ? '#f7f4ea' : '#0a0a0a';
-}
-if(themeToggle){
-  refreshThemeButton();
-  themeToggle.addEventListener('click',()=>{
-    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem('noor-quran-theme',next);
-    refreshThemeButton();
-  });
-}
-
-// البحث عن تحديث منشور على الموقع وتفعيله من داخل التطبيق
-const checkUpdateBtn = document.getElementById('checkUpdateBtn');
-let updateReloadArmed = false;
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    if(updateReloadArmed) window.location.reload();
-  });
-}
-if(checkUpdateBtn){
-  checkUpdateBtn.addEventListener('click',async()=>{
-    const original = checkUpdateBtn.textContent;
-    checkUpdateBtn.disabled = true;
-    checkUpdateBtn.textContent = '…';
-    try{
-      if(!('serviceWorker' in navigator)) throw new Error('المتصفح لا يدعم تحديث التطبيق تلقائيًا');
-      const reg = await navigator.serviceWorker.getRegistration('/');
-      if(!reg) throw new Error('لم يتم تفعيل عامل التحديث بعد. افتح التطبيق مع الإنترنت ثم حاول مرة أخرى.');
-      await reg.update();
-      if(reg.waiting){
-        updateReloadArmed = true;
-        reg.waiting.postMessage({type:'SKIP_WAITING'});
-        checkUpdateBtn.textContent = '⬇️';
-        return;
-      }
-      const installing = reg.installing;
-      if(installing){
-        installing.addEventListener('statechange',()=>{
-          if(installing.state === 'installed' && navigator.serviceWorker.controller){
-            updateReloadArmed = true;
-            if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
-          }
-        });
-        alert('جاري تنزيل التحديث. سيُعاد فتح التطبيق تلقائيًا عند اكتماله.');
-      }else{
-        alert('أنت تستخدم أحدث إصدار متاح حاليًا.');
-      }
-    }catch(err){
-      alert('لم نتمكن من التحقق من التحديث. تأكد من اتصال الإنترنت ثم حاول مرة أخرى.\n' + (err.message || ''));
-    }finally{
-      setTimeout(()=>{checkUpdateBtn.disabled=false;checkUpdateBtn.textContent=original;},1200);
-    }
-  });
-}
+addEventListener('hashchange',route);route();
 </script>
 </body>
 </html>
