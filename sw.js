@@ -7,7 +7,7 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-self.addEvenatListener('activate', event => {
+self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
     // Preserve downloaded Quran data across app-shell updates.
@@ -66,10 +66,6 @@ function offlineResponse() {
   return new Response(JSON.stringify({ code: 503, status: 'OFFLINE', message: 'هذه البيانات غير محفوظة على الجهاز. اتصل بالإنترنت ونزّل المحتوى مرة أخرى.' }), {
     status: 503, headers: { 'Content-Type': 'application/json; charset=utf-8' }
   });
-}
-
-self.addEventListener('message', event => { if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting(); });
-
 }
 
 self.addEventListener('message', event => { if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting(); });
