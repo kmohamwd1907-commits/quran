@@ -278,13 +278,6 @@ html[data-theme="light"] .m-page .loader{color:#716b5b}
 </header>
 
 <div class="ayah-banner">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</div>
-<div id="offlineStatus" role="status" style="text-align:center;padding:6px 12px;font-size:.85rem;background:#151515;color:#d4af37">جارٍ تجهيز التشغيل دون إنترنت…</div>
-<div id="offlineDownloadBox" style="max-width:760px;margin:12px auto;padding:12px 16px;text-align:center;background:#151515;border:1px solid #2a2412;border-radius:14px">
-  <button id="downloadOfflineBtn" class="btn gold" type="button">⬇️ حفظ القرآن والتفسير والأحاديث والأذكار دون إنترنت</button>
-  <div id="offlineDownloadText" role="status" style="margin-top:8px;font-size:.9rem;color:#cfc5a5">يحفظ نص القرآن والتفسير وصفحات المصحف على هذا الجهاز. الأحاديث والأذكار مضمّنة في الموقع، والصوتيات تظل عبر الإنترنت. يلزم الإنترنت لتنزيل بيانات القرآن أول مرة.</div>
-  <progress id="offlineDownloadProgress" max="718" value="0" style="width:min(100%,520px);height:14px;margin-top:8px;accent-color:#d4af37" hidden></progress>
-</div>
-
 <main>
   <section id="home" class="view">
     <div class="hero">
@@ -1166,7 +1159,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     try {
       const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
       await navigator.serviceWorker.ready;
-      if (el) el.textContent = 'تم تفعيل دعم العمل دون إنترنت. افتح المحتوى أثناء الاتصال لحفظ البيانات لاستخدامها لاحقًا.';
+      if (el) el.textContent = '';
       console.info('Noor Quran service worker ready:', registration.scope);
     } catch (err) {
       console.error('Noor Quran service worker registration failed:', err);
