@@ -32,10 +32,10 @@ input[type=search]{width:100%;padding:12px 14px;border:1px solid var(--line);bor
 .page{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 20px}
 .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
 .bar a,.bar button{background:var(--accsoft);color:var(--acc);border:0;border-radius:8px;padding:6px 14px;text-decoration:none;font:inherit;cursor:pointer}
-.mushaf{font-family:'Amiri Quran',serif;line-height:2.5;text-align:justify;font-size:var(--fs,1.9rem)}
+.mushaf{font-family:'Amiri Quran',serif;line-height:2.5;text-align:right;text-wrap:pretty;word-spacing:0;font-size:var(--fs,1.9rem)}
 .mushaf .a{cursor:pointer}
 .mushaf .a.mark{background:var(--accsoft);border-radius:6px}
-.end{color:var(--acc2);font-size:.8em;margin:0 4px}
+.end{color:var(--acc2);font-size:.8em;margin:0 2px;white-space:nowrap}
 .bsm{text-align:center;font-family:'Amiri Quran',serif;font-size:1.9rem;color:var(--acc);margin:6px 0 14px}
 .z{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
 .z p{margin:0 0 10px;font-size:1.1rem}
@@ -51,6 +51,19 @@ select{padding:10px;border:1px solid var(--line);border-radius:10px;background:v
 .pr{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
 .pr.nx{background:var(--accsoft);color:var(--acc);font-weight:600}
 #nx{text-align:center;font-size:1.2rem;color:var(--acc);margin:10px 0 16px}
+
+.top{flex-wrap:wrap}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.tools button{margin:0;font-size:.8rem;padding:6px 10px}
+@media(max-width:600px){
+ header{padding:12px 10px 0}h1{font-size:1.6rem}
+ nav a{font-size:.85rem;padding:9px 2px}
+ main{padding:14px 10px 50px}.page{padding:16px 12px}
+ .grid{grid-template-columns:1fr 1fr;gap:8px}.s{padding:10px;gap:8px}.n{min-width:30px;height:30px;font-size:.8rem}
+ .s b{font-size:1.1rem}.s small{font-size:.68rem}
+ .mushaf{line-height:2.2}.bar{justify-content:center}.z{padding:14px}
+}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -178,7 +191,7 @@ const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظه
 const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
 const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
 let tick;
-async function playAdhan(test){try{const b=await idb.get('adhan');if(!b){if(test)alert('اختر ملف الأذان أولاً');return}await new Audio(URL.createObjectURL(b)).play()}catch(e){if(test)alert('تعذّر التشغيل، اضغط في الصفحة ثم أعد المحاولة')}}
+async function playAdhan(test){try{const b=await idb.get('adhan');await new Audio(b?URL.createObjectURL(b):'adhan.mp3').play()}catch(e){if(test)alert('تعذّر التشغيل: اختر ملف أذان من الصفحة أو ضع adhan.mp3 بجانب index.html، ثم اضغط في الصفحة وأعد المحاولة')}}
 let played='';
 setInterval(()=>{if(store.get('adhan')!=='1')return;const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
   for(const [id] of NAMES){if(id!=='sunrise'&&Math.round(t[id]*60)===c&&played!==n.toDateString()+id){played=n.toDateString()+id;playAdhan()}}},15000);
@@ -192,7 +205,7 @@ function prayer(){
   $('#g').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{store.set('loc',JSON.stringify({n:'موقعي',lat:p.coords.latitude,lng:p.coords.longitude}));prayer()},()=>alert('تعذّر تحديد الموقع')):alert('المتصفح لا يدعم تحديد الموقع');
   $('#ad').onchange=e=>store.set('adhan',e.target.checked?'1':'0');
   $('#t').onclick=()=>playAdhan(true);
-  idb.get('adhan').then(b=>$('#fs').textContent=b?'تم حفظ ملف الأذان على الجهاز.':'لم يتم اختيار ملف أذان بعد.').catch(()=>{});
+  idb.get('adhan').then(b=>$('#fs').textContent=b?'تم حفظ ملف الأذان على الجهاز.':'لم تختر ملفاً؛ سيُستخدم adhan.mp3 إن وضعته بجانب index.html.').catch(()=>{});
   $('#f').onchange=async e=>{const f=e.target.files[0];if(f){await idb.set('adhan',f);$('#fs').textContent='تم حفظ: '+f.name}};
   const draw=()=>{const n=new Date(),t=times(n,loc),c=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
     let nx=NAMES.findIndex(([id])=>t[id]*3600>c),left;
