@@ -1204,4 +1204,19 @@ if(checkUpdateBtn){
           if(installing.state === 'installed' && navigator.serviceWorker.controller){
             updateReloadArmed = true;
             if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
-       
+          }
+        });
+        alert('جاري تنزيل التحديث. سيُعاد فتح التطبيق تلقائيًا عند اكتماله.');
+      }else{
+        alert('أنت تستخدم أحدث إصدار متاح حاليًا.');
+      }
+    }catch(err){
+      alert('لم نتمكن من التحقق من التحديث. تأكد من اتصال الإنترنت ثم حاول مرة أخرى.\n' + (err.message || ''));
+    }finally{
+      setTimeout(()=>{checkUpdateBtn.disabled=false;checkUpdateBtn.textContent=original;},1200);
+    }
+  });
+}
+</script>
+</body>
+</html>
