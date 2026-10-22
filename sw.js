@@ -1,71 +1,7 @@
-const SHELL_CACHE = 'noor-quran-shell-v6';
-const DATA_CACHE = 'noor-quran-data-v6';
-const SHELL_URLS = ['/', '/index.html', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
-
-self.addEventListener('install', event => {
-  event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(SHELL_URLS)).catch(() => {}));
-  self.skipWaiting();
+const C='noor-v1';
+self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['./','index.html'])).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(clients.claim()));
+self.addEventListener('fetch',e=>{
+  if(e.request.method!=='GET'||new URL(e.request.url).origin!==location.origin)return;
+  e.respondWith(fetch(e.request).then(r=>{const x=r.clone();caches.open(C).then(c=>c.put(e.request,x));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('index.html'))));
 });
-
-self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    // Preserve downloaded Quran data across app-shell updates.
-    await Promise.all(keys.filter(k => k.startsWith('noor-quran-shell-') && k !== SHELL_CACHE).map(k => caches.delete(k)));
-    await self.clients.claim();
-  })());
-});
-
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
-
-  if (url.hostname === 'api.alquran.cloud' || url.hostname === 'api.aladhan.com') {
-    event.respondWith((async () => {
-      const cache = await caches.open(DATA_CACHE);
-      // Network-first: do not trust navigator.onLine, which can be inaccurate.
-      // If the network request fails, look in the current and older download caches.
-      try {
-        const response = await fetch(req);
-        if (response && response.ok) await cache.put(req, response.clone());
-        return response;
-      } catch (err) {
-        const saved = await cache.match(req) || await cache.match(url.href);
-        if (saved) return saved;
-        const all = await caches.keys();
-        for (const name of all) {
-          if (name === DATA_CACHE) continue;
-          const c = await caches.open(name);
-          const hit = await c.match(req) || await c.match(url.href);
-          if (hit) return hit;
-        }
-        return offlineResponse();
-      }
-    })());
-    return;
-  }
-
-  event.respondWith((async () => {
-    const cache = await caches.open(SHELL_CACHE);
-    try {
-      const response = await fetch(req);
-      if (response && response.ok && (url.origin === self.location.origin || url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com'))) {
-        await cache.put(req, response.clone());
-      }
-      return response;
-    } catch (err) {
-      const saved = await cache.match(req) || await cache.match('/index.html') || await cache.match('/');
-      if (saved) return saved;
-      return new Response('أنت دون اتصال بالإنترنت. افتح الموقع مرة أثناء الاتصال ليتم حفظه.', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
-    }
-  })());
-});
-
-function offlineResponse() {
-  return new Response(JSON.stringify({ code: 503, status: 'OFFLINE', message: 'هذه البيانات غير محفوظة على الجهاز. اتصل بالإنترنت ونزّل المحتوى مرة أخرى.' }), {
-    status: 503, headers: { 'Content-Type': 'application/json; charset=utf-8' }
-  });
-}
-
-self.addEventListener('message', event => { if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting(); });
