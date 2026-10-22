@@ -1,6 +1,6 @@
-const SHELL_CACHE = 'noor-quran-shell-v1';
-const DATA_CACHE = 'noor-quran-data-v1';
-const SHELL_URLS = ['./', './index.html', './manifest.webmanifest'];
+const SHELL_CACHE = 'noor-quran-shell-v2';
+const DATA_CACHE = 'noor-quran-data-v2';
+const SHELL_URLS = ['/', '/index.html', '/manifest.webmanifest'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(SHELL_URLS)).catch(() => {}));
@@ -49,10 +49,9 @@ self.addEventListener('fetch', event => {
       }
       return response;
     } catch (err) {
-      const saved = await cache.match(req) || await cache.match('./index.html') || await cache.match('./');
+      const saved = await cache.match(req) || await cache.match('/index.html') || await cache.match('/');
       if (saved) return saved;
       return new Response('أنت دون اتصال بالإنترنت. افتح الموقع مرة أثناء الاتصال ليتم حفظه.', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
     }
   })());
-});
 });
