@@ -1092,7 +1092,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     try {
       const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
       await navigator.serviceWorker.ready;
-      if (el) el.textContent = 'تم تفعيل دعم العمل دون إنترنت. افتح المحتوى أثناء الاتصال لحفظ البيانات لاستخدامها لاحقًا.';
+      if (el) el.textContent = 'Done.';
       console.info('Noor Quran service worker ready:', registration.scope);
     } catch (err) {
       console.error('Noor Quran service worker registration failed:', err);
