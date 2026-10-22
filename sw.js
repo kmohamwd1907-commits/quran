@@ -1,6 +1,6 @@
-const SHELL_CACHE = 'noor-quran-shell-v2';
+const SHELL_CACHE = 'noor-quran-shell-v3';
 const DATA_CACHE = 'noor-quran-data-v3';
-const SHELL_URLS = ['/', '/index.html', '/manifest.webmanifest'];
+const SHELL_URLS = ['/', '/index.html', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(SHELL_URLS)).catch(() => {}));
