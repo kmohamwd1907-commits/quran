@@ -12,6 +12,11 @@
   <meta name="apple-mobile-web-app-title" content="نور القرآن">
   <!-- Vercel Web Analytics: enable Web Analytics in the Vercel project dashboard -->
   <script>
+// حفظ اختيار الوضع الليلي/النهاري على الجهاز
+(function(){
+  const saved = localStorage.getItem('noor-quran-theme');
+  document.documentElement.dataset.theme = saved === 'light' ? 'light' : 'dark';
+})();
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -170,6 +175,8 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
 .m-input{width:78px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;outline:none;text-align:center}
 .m-input:focus{border-color:var(--gold)}
 .m-page{
+  touch-action:pan-y;
+  user-select:none;-webkit-user-select:none;
   max-width:780px;margin:0 auto;padding:24px clamp(14px,4vw,44px) 18px;
   background:linear-gradient(180deg,#15120a,#0d0b06);
   border:2px solid var(--gold-3);border-radius:10px;min-height:60vh;
@@ -220,6 +227,26 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
   .player{gap:8px}
   .surah-nav .btn,.m-nav .btn{padding:10px 14px;font-size:.85rem}
 }
+
+/* الوضع النهاري: ألوان فاتحة مع الحفاظ على الهوية الذهبية */
+html[data-theme="light"]{
+  --bg:#f7f4ea;--bg2:#fffdf7;--card:#ffffff;--line:#e2d7b4;
+  --gold:#987313;--gold-2:#b58a16;--gold-3:#e0bd55;
+  --text:#242016;--muted:#716b5b;
+}
+html[data-theme="light"] .top{background:rgba(255,253,247,.94)}
+html[data-theme="light"] .hero-main,
+html[data-theme="light"] .prayer{background:linear-gradient(160deg,#fff8df,#ffffff)}
+html[data-theme="light"] .icon-btn:hover{background:#f4ebce}
+html[data-theme="light"] .icon-btn.big{color:#201a08}
+html[data-theme="light"] #offlineStatus{background:#fff8df!important;color:#80600b!important}
+html[data-theme="light"] #offlineDownloadBox{background:#fffdf7!important;border-color:#e2d7b4!important}
+html[data-theme="light"] .daily .verse{color:#987313}
+html[data-theme="light"] .player,
+html[data-theme="light"] .modal,
+html[data-theme="light"] .reader,
+html[data-theme="light"] .tafseer,
+html[data-theme="light"] .search input{background:var(--bg2)}
 </style>
 </head>
 <body>
@@ -233,6 +260,8 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
   </div>
   <button id="goMushaf" class="icon-btn" title="المصحف">📖</button>
   <button id="goBookmarks" class="icon-btn" title="المحفوظات">★</button>
+  <button id="themeToggle" class="icon-btn" type="button" title="تبديل الوضع النهاري والليلي" aria-label="تبديل الوضع">☀️</button>
+  <button id="checkUpdateBtn" class="icon-btn" type="button" title="البحث عن تحديث" aria-label="البحث عن تحديث">↻</button>
 </header>
 
 <div class="ayah-banner">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</div>
@@ -336,9 +365,6 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
       <button class="btn ghost back" data-back>→ الرئيسية</button>
       <div class="m-ctrls">
         <select id="mSurah"><option value="">اذهب إلى سورة…</option></select>
-        <label class="ctl">صفحة
-          <input id="mPageInput" class="m-input" type="number" min="1" max="604" value="1">
-        </label>
         <button id="mSmall" class="icon-btn" title="تصغير الخط">أ-</button>
         <button id="mBig" class="icon-btn" title="تكبير الخط">أ+</button>
       </div>
@@ -346,10 +372,6 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
 
     <div id="mPage" class="m-page"></div>
 
-    <div class="m-nav">
-      <button id="mPrev" class="btn ghost">الصفحة السابقة →</button>
-      <button id="mNext" class="btn gold">← الصفحة التالية</button>
-    </div>
   </section>
 </main>
 
@@ -869,21 +891,18 @@ function fillMushafSurahs() {
 async function openMushaf(p = mState.page) {
   p = Math.min(604, Math.max(1, parseInt(p) || 1));
   stopAudio();
-  showView('mushaf');
+  // لا نعيد تمرير الشاشة لأعلى عند كل تقليب؛ نمرر للأعلى فقط عند فتح المصحف أول مرة.
+  if ($('#mushaf').hidden) showView('mushaf');
   mState.page = p;
   store.set('mp', p);
   history.replaceState(null, '', `#m${p}`);
   fillMushafSurahs();
-  $('#mPageInput').value = p;
-  $('#mPrev').style.visibility = p <= 1 ? 'hidden' : 'visible';
-  $('#mNext').style.visibility = p >= 604 ? 'hidden' : 'visible';
   $('#mPage').innerHTML = '<div class="loader">جارٍ تحميل الصفحة…</div>';
   try {
     let d = mState.cache[p];
     if (!d) { d = await getJSON(`${API}/page/${p}/quran-uthmani`); mState.cache[p] = d; }
     if (mState.page !== p) return;
     renderMushaf(d, p);
-    window.scrollTo({ top: 0 });
   } catch {
     $('#mPage').innerHTML = '<p class="empty">تعذّر تحميل الصفحة. تحقق من الاتصال وأعد المحاولة.</p>';
   }
@@ -926,9 +945,6 @@ $('#toMushaf').onclick = () => {
   const pg = state.data && state.data[0].ayahs[0].page;
   openMushaf(pg || 1);
 };
-$('#mNext').onclick = () => openMushaf(mState.page + 1);
-$('#mPrev').onclick = () => openMushaf(mState.page - 1);
-$('#mPageInput').onchange = e => openMushaf(e.target.value);
 $('#mSurah').onchange = async e => {
   const s = e.target.value;
   if (!s) return;
@@ -955,13 +971,21 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') openMushaf(mState.page - 1);
 });
 
-let tx = 0;
-$('#mPage').addEventListener('touchstart', e => (tx = e.touches[0].clientX), { passive: true });
+let tx = 0, ty = 0;
+$('#mPage').addEventListener('touchstart', e => {
+  if (e.touches.length !== 1) return;
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+}, { passive: true });
 $('#mPage').addEventListener('touchend', e => {
+  if (e.changedTouches.length !== 1) return;
   const dx = e.changedTouches[0].clientX - tx;
-  if (dx < -70) openMushaf(mState.page + 1);
-  else if (dx > 70) openMushaf(mState.page - 1);
-});
+  const dy = e.changedTouches[0].clientY - ty;
+  // تقليب أفقي فقط؛ السحب الرأسي يظل للتمرير الطبيعي داخل الصفحة.
+  if (Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+  if (dx < 0 && mState.page < 604) openMushaf(mState.page + 1);
+  else if (dx > 0 && mState.page > 1) openMushaf(mState.page - 1);
+}, { passive: true });
 
 (async function init() {
   loadDaily();
@@ -1092,7 +1116,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     try {
       const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
       await navigator.serviceWorker.ready;
-      if (el) el.textContent = 'Done.';
+      if (el) el.textContent = 'تم تفعيل دعم العمل دون إنترنت. افتح المحتوى أثناء الاتصال لحفظ البيانات لاستخدامها لاحقًا.';
       console.info('Noor Quran service worker ready:', registration.scope);
     } catch (err) {
       console.error('Noor Quran service worker registration failed:', err);
@@ -1102,6 +1126,68 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 } else {
   const el = $('#offlineStatus');
   if (el) el.textContent = 'المتصفح الحالي لا يدعم وضع عدم الاتصال أو أن الصفحة ليست على HTTPS.';
+}
+
+// زر تبديل المظهر
+const themeToggle = document.getElementById('themeToggle');
+function refreshThemeButton(){
+  const light = document.documentElement.dataset.theme === 'light';
+  if(themeToggle){ themeToggle.textContent = light ? '🌙' : '☀️'; themeToggle.title = light ? 'التبديل إلى الوضع الليلي' : 'التبديل إلى الوضع النهاري'; }
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if(metaTheme) metaTheme.content = light ? '#f7f4ea' : '#0a0a0a';
+}
+if(themeToggle){
+  refreshThemeButton();
+  themeToggle.addEventListener('click',()=>{
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('noor-quran-theme',next);
+    refreshThemeButton();
+  });
+}
+
+// البحث عن تحديث منشور على الموقع وتفعيله من داخل التطبيق
+const checkUpdateBtn = document.getElementById('checkUpdateBtn');
+let updateReloadArmed = false;
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(updateReloadArmed) window.location.reload();
+  });
+}
+if(checkUpdateBtn){
+  checkUpdateBtn.addEventListener('click',async()=>{
+    const original = checkUpdateBtn.textContent;
+    checkUpdateBtn.disabled = true;
+    checkUpdateBtn.textContent = '…';
+    try{
+      if(!('serviceWorker' in navigator)) throw new Error('المتصفح لا يدعم تحديث التطبيق تلقائيًا');
+      const reg = await navigator.serviceWorker.getRegistration('/');
+      if(!reg) throw new Error('لم يتم تفعيل عامل التحديث بعد. افتح التطبيق مع الإنترنت ثم حاول مرة أخرى.');
+      await reg.update();
+      if(reg.waiting){
+        updateReloadArmed = true;
+        reg.waiting.postMessage({type:'SKIP_WAITING'});
+        checkUpdateBtn.textContent = '⬇️';
+        return;
+      }
+      const installing = reg.installing;
+      if(installing){
+        installing.addEventListener('statechange',()=>{
+          if(installing.state === 'installed' && navigator.serviceWorker.controller){
+            updateReloadArmed = true;
+            if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+          }
+        });
+        alert('جاري تنزيل التحديث. سيُعاد فتح التطبيق تلقائيًا عند اكتماله.');
+      }else{
+        alert('أنت تستخدم أحدث إصدار متاح حاليًا.');
+      }
+    }catch(err){
+      alert('لم نتمكن من التحقق من التحديث. تأكد من اتصال الإنترنت ثم حاول مرة أخرى.\n' + (err.message || ''));
+    }finally{
+      setTimeout(()=>{checkUpdateBtn.disabled=false;checkUpdateBtn.textContent=original;},1200);
+    }
+  });
 }
 </script>
 </body>
