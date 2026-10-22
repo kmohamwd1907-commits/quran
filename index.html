@@ -227,6 +227,11 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
 
 <div class="ayah-banner">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</div>
 <div id="offlineStatus" role="status" style="text-align:center;padding:6px 12px;font-size:.85rem;background:#151515;color:#d4af37">جارٍ تجهيز التشغيل دون إنترنت…</div>
+<div id="offlineDownloadBox" style="max-width:760px;margin:12px auto;padding:12px 16px;text-align:center;background:#151515;border:1px solid #2a2412;border-radius:14px">
+  <button id="downloadOfflineBtn" class="btn gold" type="button">⬇️ تحميل القرآن والتفسير للاستخدام دون إنترنت</button>
+  <div id="offlineDownloadText" role="status" style="margin-top:8px;font-size:.9rem;color:#cfc5a5">ينزّل نص القرآن والتفسير وبيانات صفحات المصحف. يلزم الإنترنت أثناء التحميل.</div>
+  <progress id="offlineDownloadProgress" max="718" value="0" style="width:min(100%,520px);height:14px;margin-top:8px;accent-color:#d4af37" hidden></progress>
+</div>
 
 <main>
   <section id="home" class="view">
@@ -970,6 +975,76 @@ if ('mediaSession' in navigator) {
   navigator.mediaSession.setActionHandler('nexttrack', () => $('#pNext').click());
   navigator.mediaSession.setActionHandler('previoustrack', () => $('#pPrev').click());
 }
+
+// تنزيل مسبق لنص القرآن والتفسير وصفحات المصحف، مع إظهار تقدم واضح.
+const OFFLINE_DATA_CACHE = 'noor-quran-data-v3';
+const offlineDownloadBtn = $('#downloadOfflineBtn');
+const offlineDownloadText = $('#offlineDownloadText');
+const offlineDownloadProgress = $('#offlineDownloadProgress');
+let offlineDownloadRunning = false;
+
+async function downloadOfflineContent() {
+  if (offlineDownloadRunning) return;
+  if (!navigator.onLine) {
+    toast('اتصل بالإنترنت أولًا لبدء التحميل');
+    offlineDownloadText.textContent = 'لا يوجد اتصال بالإنترنت. اتصل بالشبكة ثم حاول مرة أخرى.';
+    return;
+  }
+  if (!('caches' in window)) {
+    toast('المتصفح لا يدعم حفظ المحتوى دون إنترنت');
+    return;
+  }
+  offlineDownloadRunning = true;
+  offlineDownloadBtn.disabled = true;
+  offlineDownloadBtn.textContent = '⏳ جارٍ التحميل…';
+  offlineDownloadProgress.hidden = false;
+  offlineDownloadProgress.max = 718;
+  offlineDownloadProgress.value = 0;
+  let done = 0;
+  const cache = await caches.open(OFFLINE_DATA_CACHE);
+  const update = (label) => {
+    offlineDownloadProgress.value = done;
+    offlineDownloadText.textContent = `${label} — ${Math.round(done / 718 * 100)}٪ (${done} من 718)`;
+  };
+  try {
+    // احفظ قائمة السور أولًا، ثم بيانات كل سورة (النص العثماني والتفسير الميسر).
+    const urls = [`${API}/surah`];
+    for (let n = 1; n <= 114; n++) urls.push(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar,${state.reciter}`);
+    // صفحات المصحف كما يستخدمها عارض الصفحات داخل الموقع.
+    for (let p = 1; p <= 604; p++) urls.push(`${API}/page/${p}/quran-uthmani`);
+    for (let i = 0; i < urls.length; i++) {
+      if (!navigator.onLine) throw new Error('انقطع الاتصال بالإنترنت');
+      const url = urls[i];
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`تعذر تنزيل المحتوى (HTTP ${response.status})`);
+      const copy = response.clone();
+      // تأكد من أن الاستجابة من واجهة القرآن صالحة قبل حفظها.
+      const body = await response.json();
+      if (body.code && body.code !== 200) throw new Error(body.status || 'فشل تحميل بيانات القرآن');
+      await cache.put(url, new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      }));
+      done++;
+      const label = i === 0 ? 'حفظ قائمة السور' : i <= 114 ? 'تحميل نص القرآن والتفسير' : 'تحميل صفحات المصحف';
+      update(label);
+      // هدنة قصيرة لتخفيف الضغط على واجهة البيانات.
+      if (done % 10 === 0) await new Promise(resolve => setTimeout(resolve, 120));
+    }
+    offlineDownloadProgress.value = 718;
+    offlineDownloadText.textContent = 'اكتمل تحميل نص القرآن والتفسير وصفحات المصحف. يمكنك فتحها دون إنترنت على هذا الجهاز.';
+    offlineDownloadBtn.textContent = '✓ تم تحميل المحتوى';
+    toast('اكتمل حفظ محتوى القرآن للاستخدام دون إنترنت');
+  } catch (err) {
+    offlineDownloadText.textContent = `لم يكتمل التحميل عند ${done} من 718. ${err && err.message ? err.message : 'حدث خطأ'}. اضغط الزر للمحاولة مرة أخرى.`;
+    offlineDownloadBtn.textContent = '↻ استكمال / إعادة المحاولة';
+    toast('لم يكتمل التحميل؛ يمكنك المحاولة مرة أخرى');
+  } finally {
+    offlineDownloadRunning = false;
+    offlineDownloadBtn.disabled = false;
+  }
+}
+offlineDownloadBtn.addEventListener('click', downloadOfflineContent);
 
 // تسجيل عامل الخدمة لحفظ ملفات الموقع وبيانات القرآن التي تُفتح أثناء الاتصال.
 function updateOfflineStatus() {
