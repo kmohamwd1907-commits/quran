@@ -6,9 +6,9 @@
   <title>نور القرآن | القرآن الكريم كاملًا</title>
   <meta name="description" content="موقع القرآن الكريم كاملًا: مصحف، قراءة، استماع بأصوات كبار القراء، تفسير ميسر، بحث في الآيات، علامات مرجعية ومواقيت الصلاة.">
   <meta name="theme-color" content="#0a0a0a">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link rel="manifest" href="/manifest.webmanifest">
   <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@400;600;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Ccircle cx='50' cy='50' r='26' fill='none' stroke='%23d4af37' stroke-width='8'/%3E%3C/svg%3E">
 <style>
@@ -23,7 +23,6 @@ body{
   font-family:'Cairo',system-ui,sans-serif;background:var(--bg);color:var(--text);
   line-height:1.7;min-height:100vh;padding-bottom:90px;
 }
-
 button,input,select{font-family:inherit;color:inherit}
 button{cursor:pointer}
 [hidden]{display:none!important}
@@ -227,6 +226,7 @@ input[type=range]{accent-color:var(--gold);cursor:pointer}
 </header>
 
 <div class="ayah-banner">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</div>
+<div id="offlineStatus" role="status" style="text-align:center;padding:6px 12px;font-size:.85rem;background:#151515;color:#d4af37">جارٍ تجهيز التشغيل دون إنترنت…</div>
 
 <main>
   <section id="home" class="view">
@@ -970,26 +970,24 @@ if ('mediaSession' in navigator) {
   navigator.mediaSession.setActionHandler('nexttrack', () => $('#pNext').click());
   navigator.mediaSession.setActionHandler('previoustrack', () => $('#pPrev').click());
 }
-</script>
-  <script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-            .then(function(registration) {
-                console.log('Service Worker registered successfully');
-            })
-            .catch(function(error) {
-                console.log('Service Worker registration failed:', error);
-            });
-    });
+
+// تسجيل عامل الخدمة لحفظ ملفات الموقع وبيانات القرآن التي تُفتح أثناء الاتصال.
+function updateOfflineStatus() {
+  const el = $('#offlineStatus');
+  if (!el) return;
+  el.textContent = navigator.onLine
+    ? 'متصل بالإنترنت — سيتم حفظ الصفحات والبيانات التي تفتحها لتعمل لاحقًا دون اتصال.'
+    : 'أنت دون اتصال — ستعمل البيانات المحفوظة سابقًا؛ افتح المحتوى أثناء الاتصال لحفظه مسبقًا.';
+  el.style.color = navigator.onLine ? '#d4af37' : '#ffcc80';
+}
+window.addEventListener('online', updateOfflineStatus);
+window.addEventListener('offline', updateOfflineStatus);
+updateOfflineStatus();
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js')
+    .then(() => updateOfflineStatus())
+    .catch(() => { const el = $('#offlineStatus'); if (el) el.textContent = 'تعذّر تفعيل وضع عدم الاتصال؛ تأكد من رفع ملفات الموقع معًا على استضافة HTTPS.'; }));
 }
 </script>
-  <script>
-    window.va = window.va || function () {
-        (window.vaq = window.vaq || []).push(arguments);
-    };
-</script>
-
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
