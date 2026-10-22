@@ -24,19 +24,8 @@ self.addEventListener('fetch', event => {
   if (url.hostname === 'api.alquran.cloud' || url.hostname === 'api.aladhan.com') {
     event.respondWith((async () => {
       const cache = await caches.open(DATA_CACHE);
-      // If offline, always try all existing app caches, including data saved by the download button.
-      if (!self.navigator?.onLine) {
-        const saved = await cache.match(req) || await cache.match(url.href);
-        if (saved) return saved;
-        const all = await caches.keys();
-        for (const name of all) {
-          if (name === DATA_CACHE) continue;
-          const c = await caches.open(name);
-          const hit = await c.match(req) || await c.match(url.href);
-          if (hit) return hit;
-        }
-        return offlineResponse();
-      }
+      // Network-first: do not trust navigator.onLine, which can be inaccurate.
+      // If the network request fails, look in the current and older download caches.
       try {
         const response = await fetch(req);
         if (response && response.ok) await cache.put(req, response.clone());
@@ -80,7 +69,3 @@ function offlineResponse() {
 }
 
 self.addEventListener('message', event => { if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting(); });
-
-self.addEventListener('message', event => { if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting(); });
-
-
