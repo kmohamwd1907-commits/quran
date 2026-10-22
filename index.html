@@ -280,8 +280,8 @@ html[data-theme="light"] .m-page .loader{color:#716b5b}
 <div class="ayah-banner">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</div>
 <div id="offlineStatus" role="status" style="text-align:center;padding:6px 12px;font-size:.85rem;background:#151515;color:#d4af37">جارٍ تجهيز التشغيل دون إنترنت…</div>
 <div id="offlineDownloadBox" style="max-width:760px;margin:12px auto;padding:12px 16px;text-align:center;background:#151515;border:1px solid #2a2412;border-radius:14px">
-  <button id="downloadOfflineBtn" class="btn gold" type="button">⬇️ تحميل القرآن والتفسير للاستخدام دون إنترنت</button>
-  <div id="offlineDownloadText" role="status" style="margin-top:8px;font-size:.9rem;color:#cfc5a5">ينزّل نص القرآن والتفسير وبيانات صفحات المصحف. يلزم الإنترنت أثناء التحميل.</div>
+  <button id="downloadOfflineBtn" class="btn gold" type="button">⬇️ حفظ القرآن والتفسير والأحاديث والأذكار دون إنترنت</button>
+  <div id="offlineDownloadText" role="status" style="margin-top:8px;font-size:.9rem;color:#cfc5a5">يحفظ نص القرآن والتفسير وصفحات المصحف على هذا الجهاز. الأحاديث والأذكار مضمّنة في الموقع، والصوتيات تظل عبر الإنترنت. يلزم الإنترنت لتنزيل بيانات القرآن أول مرة.</div>
   <progress id="offlineDownloadProgress" max="718" value="0" style="width:min(100%,520px);height:14px;margin-top:8px;accent-color:#d4af37" hidden></progress>
 </div>
 
@@ -452,10 +452,32 @@ function toast(msg) {
 }
 
 async function getJSON(url) {
+  // استخدم النسخة المحفوظة على الجهاز أولًا؛ لا تحتاج الشبكة إذا كانت البيانات موجودة.
+  try {
+    if ('caches' in window) {
+      const names = await caches.keys();
+      for (const name of names) {
+        if (!name.startsWith('noor-quran-data-')) continue;
+        const savedCache = await caches.open(name);
+        const saved = await savedCache.match(url);
+        if (saved) {
+          const localJson = await saved.json();
+          if (!localJson.code || localJson.code === 200) return localJson.data;
+        }
+      }
+    }
+  } catch (_) { /* جرّب الاتصال إذا لم تتوفر نسخة محلية */ }
+  // إذا لم توجد نسخة محلية، نزّلها واحفظها لاستخدامها لاحقًا دون إنترنت.
   const r = await fetch(url);
   if (!r.ok) throw new Error('HTTP ' + r.status);
   const j = await r.json();
   if (j.code && j.code !== 200) throw new Error(j.status || 'API error');
+  try {
+    if ('caches' in window && r.url.startsWith(API)) {
+      const cache = await caches.open('noor-quran-data-v6');
+      await cache.put(url, new Response(JSON.stringify(j), {status: 200, headers: {'Content-Type':'application/json; charset=utf-8'}}));
+    }
+  } catch (_) { /* عدم توفر التخزين لا يمنع عرض البيانات المتصلة */ }
   return j.data;
 }
 
@@ -1107,14 +1129,14 @@ async function downloadOfflineContent() {
       if (done % 10 === 0) await new Promise(resolve => setTimeout(resolve, 120));
     }
     offlineDownloadProgress.value = 719;
-    offlineDownloadText.textContent = 'اكتمل تحميل نص القرآن والتفسير وصفحات المصحف. يمكنك فتحها دون إنترنت على هذا الجهاز.';
+    offlineDownloadText.textContent = 'اكتمل حفظ نص القرآن والتفسير وصفحات المصحف على هذا الجهاز. الأحاديث والأذكار مضمّنة محليًا، أما الصوتيات فتحتاج إلى الإنترنت.';
     offlineDownloadBtn.textContent = '✓ تم تحميل المحتوى';
     // خزّن علامة الاكتمال حتى لا يظهر زر التحميل مرة أخرى عند إعادة فتح الموقع على الجهاز نفسه.
     await cache.put(OFFLINE_COMPLETE_MARKER, new Response('complete', {
       status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     }));
     if (offlineDownloadBox) offlineDownloadBox.hidden = true;
-    toast('اكتمل حفظ محتوى القرآن للاستخدام دون إنترنت');
+    toast('تم حفظ بيانات القرآن؛ الأحاديث والأذكار موجودة محليًا، والصوتيات أونلاين');
   } catch (err) {
     offlineDownloadText.textContent = `لم يكتمل التحميل عند ${done} من 719. ${err && err.message ? err.message : 'حدث خطأ'}. اضغط الزر للمحاولة مرة أخرى.`;
     offlineDownloadBtn.textContent = '↻ استكمال / إعادة المحاولة';
