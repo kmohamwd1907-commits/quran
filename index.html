@@ -1024,7 +1024,7 @@ if ('mediaSession' in navigator) {
 }
 
 // تنزيل مسبق لنص القرآن والتفسير وصفحات المصحف، مع إظهار تقدم واضح.
-const OFFLINE_DATA_CACHE = 'noor-quran-data-v3';
+const OFFLINE_DATA_CACHE = 'noor-quran-data-v5';
 const offlineDownloadBtn = $('#downloadOfflineBtn');
 const offlineDownloadText = $('#offlineDownloadText');
 const offlineDownloadProgress = $('#offlineDownloadProgress');
@@ -1058,13 +1058,13 @@ async function downloadOfflineContent() {
   offlineDownloadBtn.disabled = true;
   offlineDownloadBtn.textContent = '⏳ جارٍ التحميل…';
   offlineDownloadProgress.hidden = false;
-  offlineDownloadProgress.max = 718;
+  offlineDownloadProgress.max = 719;
   offlineDownloadProgress.value = 0;
   let done = 0;
   const cache = await caches.open(OFFLINE_DATA_CACHE);
   const update = (label) => {
     offlineDownloadProgress.value = done;
-    offlineDownloadText.textContent = `${label} — ${Math.round(done / 718 * 100)}٪ (${done} من 718)`;
+    offlineDownloadText.textContent = `${label} — ${Math.round(done / 719 * 100)}٪ (${done} من 719)`;
   };
   try {
     // احفظ قائمة السور أولًا، ثم بيانات كل سورة (النص العثماني والتفسير الميسر).
@@ -1091,7 +1091,7 @@ async function downloadOfflineContent() {
       // هدنة قصيرة لتخفيف الضغط على واجهة البيانات.
       if (done % 10 === 0) await new Promise(resolve => setTimeout(resolve, 120));
     }
-    offlineDownloadProgress.value = 718;
+    offlineDownloadProgress.value = 719;
     offlineDownloadText.textContent = 'اكتمل تحميل نص القرآن والتفسير وصفحات المصحف. يمكنك فتحها دون إنترنت على هذا الجهاز.';
     offlineDownloadBtn.textContent = '✓ تم تحميل المحتوى';
     // خزّن علامة الاكتمال حتى لا يظهر زر التحميل مرة أخرى عند إعادة فتح الموقع على الجهاز نفسه.
@@ -1101,7 +1101,7 @@ async function downloadOfflineContent() {
     if (offlineDownloadBox) offlineDownloadBox.hidden = true;
     toast('اكتمل حفظ محتوى القرآن للاستخدام دون إنترنت');
   } catch (err) {
-    offlineDownloadText.textContent = `لم يكتمل التحميل عند ${done} من 718. ${err && err.message ? err.message : 'حدث خطأ'}. اضغط الزر للمحاولة مرة أخرى.`;
+    offlineDownloadText.textContent = `لم يكتمل التحميل عند ${done} من 719. ${err && err.message ? err.message : 'حدث خطأ'}. اضغط الزر للمحاولة مرة أخرى.`;
     offlineDownloadBtn.textContent = '↻ استكمال / إعادة المحاولة';
     toast('لم يكتمل التحميل؛ يمكنك المحاولة مرة أخرى');
   } finally {
