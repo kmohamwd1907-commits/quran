@@ -194,7 +194,7 @@ const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظه
 const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
 const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
 let tick;
-async function playAdhan(test){try{const b=await idb.get('adhan');aud=new Audio(b?URL.createObjectURL(b):'adhan.mp3');await aud.play()}catch(e){if(test)alert('تعذّر التشغيل: اختر ملف أذان من الصفحة أو ضع adhan.mp3 بجانب index.html، ثم اضغط في الصفحة وأعد المحاولة')}}
+async function playAdhan(test){try{const b=await idb.get('adhan');aud=new Audio(b?URL.createObjectURL(b):'https://www.islamcan.com/audio/adhan/azan14.mp3');await aud.play()}catch(e){if(test)alert('تعذّر التشغيل: اختر ملف أذان من الصفحة أو ضع adhan.mp3 بجانب index.html، ثم اضغط في الصفحة وأعد المحاولة')}}
 let played='',aud;
 setInterval(()=>{if(store.get('adhan')!=='1')return;const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
   for(const [id] of NAMES){if(id!=='sunrise'&&Math.round(t[id]*60)===c&&played!==n.toDateString()+id){played=n.toDateString()+id;playAdhan()}}},15000);
