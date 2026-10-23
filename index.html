@@ -8,18 +8,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f3f6f1;--card:#fff;--ink:#16261f;--mute:#5d6f66;--line:#d5dfd7;--acc:#0e5c4a;--acc2:#b8892b;--accsoft:#e2efe9}
-:root[data-theme=dark]{--bg:#0f1a16;--card:#16251f;--ink:#e8efe9;--mute:#98aaa1;--line:#27382f;--acc:#4fc3a1;--acc2:#e0b559;--accsoft:#1b3128}
+:root{--bg:#fffdf6;--card:#fff;--ink:#141414;--mute:#6b6350;--line:#e6d9ab;--acc:#8a6508;--acc2:#c9a227;--accsoft:#f7efd2;--on:#fff}
+:root[data-theme=dark]{--bg:#0a0a0a;--card:#151515;--ink:#f6f1e3;--mute:#b5ac92;--line:#3a3220;--acc:#e6bf4f;--acc2:#e6bf4f;--accsoft:#2a2410;--on:#111}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Readex Pro',Tahoma,system-ui,sans-serif;line-height:1.7}
-header{background:var(--acc);color:#fff;padding:18px 16px 0}
-:root[data-theme=dark] header{background:#12362b}
+header{background:#0d0d0d;color:#f6f1e3;padding:18px 16px 0;border-bottom:3px solid #c9a227}
+header h1{color:#e6bf4f}
 .top{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
 h1{margin:0;font-family:'Amiri Quran',serif;font-size:2rem;font-weight:400}
-.tools button{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;margin-inline-start:6px}
+.tools button{background:transparent;color:#e6bf4f;border:1px solid #c9a227;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;margin-inline-start:6px}
 nav{max-width:900px;margin:14px auto 0;display:flex;gap:4px}
-nav a{flex:1;text-align:center;padding:10px 6px;color:#fff;text-decoration:none;opacity:.75;border-bottom:3px solid transparent}
-nav a.on{opacity:1;border-color:var(--acc2);font-weight:600}
+nav a{flex:1;text-align:center;padding:10px 6px;color:#f6f1e3;text-decoration:none;opacity:.75;border-bottom:3px solid transparent}
+nav a.on{opacity:1;border-color:#e6bf4f;color:#e6bf4f;font-weight:600}
 main{max-width:900px;margin:auto;padding:20px 14px 60px}
 a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
 input[type=search]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;margin-bottom:14px}
@@ -32,7 +32,7 @@ input[type=search]{width:100%;padding:12px 14px;border:1px solid var(--line);bor
 .page{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 20px}
 .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
 .bar a,.bar button{background:var(--accsoft);color:var(--acc);border:0;border-radius:8px;padding:6px 14px;text-decoration:none;font:inherit;cursor:pointer}
-.mushaf{font-family:'Amiri Quran',serif;line-height:2.5;text-align:right;text-wrap:pretty;word-spacing:0;font-size:var(--fs,1.9rem)}
+.mushaf{font-family:'Amiri Quran',serif;line-height:1.9;text-align:right;text-wrap:pretty;word-spacing:0;font-size:var(--fs,1.9rem)}
 .mushaf .a{cursor:pointer}
 .mushaf .a.mark{background:var(--accsoft);border-radius:6px}
 .end{color:var(--acc2);font-size:.8em;margin:0 2px;white-space:nowrap}
@@ -41,29 +41,32 @@ input[type=search]{width:100%;padding:12px 14px;border:1px solid var(--line);bor
 .z p{margin:0 0 10px;font-size:1.1rem}
 .z .src{color:var(--mute);font-size:.8rem}
 .cnt{display:inline-flex;align-items:center;gap:10px;background:var(--accsoft);color:var(--acc);border:0;border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer;margin-top:6px}
-.cnt.done{background:var(--acc);color:#fff}
+.cnt.done{background:var(--acc);color:var(--on)}
 .sub{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .sub button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer}
-.sub button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.sub button.on{background:var(--acc);color:var(--on);border-color:var(--acc)}
 .h{font-size:1.1rem}.h .num{color:var(--acc2);font-weight:600;font-size:.85rem}
 .msg{text-align:center;color:var(--mute);padding:40px 0}
 select{padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
 .pr{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
 .pr.nx{background:var(--accsoft);color:var(--acc);font-weight:600}
-#nx{text-align:center;font-size:1.2rem;color:var(--acc);margin:10px 0 16px}
+#nx{font-variant-numeric:tabular-nums;text-align:center;font-size:1.2rem;color:var(--acc);margin:10px 0 16px}
 
 .top{flex-wrap:wrap}
 .tools{display:flex;gap:6px;flex-wrap:wrap}
 .tools button{margin:0;font-size:.8rem;padding:6px 10px}
 @media(max-width:600px){
  header{padding:12px 10px 0}h1{font-size:1.6rem}
- nav a{font-size:.85rem;padding:9px 2px}
+ nav a{font-size:.78rem;padding:9px 1px}
  main{padding:14px 10px 50px}.page{padding:16px 12px}
  .grid{grid-template-columns:1fr 1fr;gap:8px}.s{padding:10px;gap:8px}.n{min-width:30px;height:30px;font-size:.8rem}
  .s b{font-size:1.1rem}.s small{font-size:.68rem}
- .mushaf{line-height:2.2}.bar{justify-content:center}.z{padding:14px}
+ .mushaf{line-height:1.8}.bar{justify-content:center}.z{padding:14px}
 }
 @media(max-width:380px){.grid{grid-template-columns:1fr}}
+nav{overflow-x:auto}nav a{flex:1 0 auto;white-space:nowrap}
+button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
+@media(max-width:600px){nav a{padding:9px 10px;font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -72,7 +75,7 @@ select{padding:10px;border:1px solid var(--line);border-radius:10px;background:v
   <h1>نُور</h1>
   <div class="tools"><button id="off">تجهيز أوفلاين</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
  </div>
- <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a></nav>
+ <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
 </header>
 <main id="app"></main>
 
@@ -191,38 +194,82 @@ const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظه
 const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
 const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
 let tick;
-async function playAdhan(test){try{const b=await idb.get('adhan');await new Audio(b?URL.createObjectURL(b):'adhan.mp3').play()}catch(e){if(test)alert('تعذّر التشغيل: اختر ملف أذان من الصفحة أو ضع adhan.mp3 بجانب index.html، ثم اضغط في الصفحة وأعد المحاولة')}}
-let played='';
+async function playAdhan(test){try{const b=await idb.get('adhan');aud=new Audio(b?URL.createObjectURL(b):'adhan.mp3');await aud.play()}catch(e){if(test)alert('تعذّر التشغيل: اختر ملف أذان من الصفحة أو ضع adhan.mp3 بجانب index.html، ثم اضغط في الصفحة وأعد المحاولة')}}
+let played='',aud;
 setInterval(()=>{if(store.get('adhan')!=='1')return;const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
   for(const [id] of NAMES){if(id!=='sunrise'&&Math.round(t[id]*60)===c&&played!==n.toDateString()+id){played=n.toDateString()+id;playAdhan()}}},15000);
 function prayer(){
+  clearInterval(tick);
   const loc=getLoc(),opts=Object.keys(CITIES).map(c=>`<option ${c===loc.n?'selected':''}>${c}</option>`).join('')+(CITIES[loc.n]?'':`<option selected>${loc.n}</option>`);
-  app.innerHTML=`<div class="bar"><select id="c" aria-label="المدينة">${opts}</select><button id="g">استخدم موقعي</button></div><div id="nx"></div><div class="page" id="pt" style="padding:0"></div>
-  <div class="z" style="margin-top:14px"><label><input type="checkbox" id="ad" ${store.get('adhan')==='1'?'checked':''}> تشغيل الأذان تلقائياً (الصفحة لازم تكون مفتوحة)</label><br><br>
-  <label>ملف الأذان: <input type="file" id="f" accept="audio/*"></label> <button class="cnt" id="t">تجربة الأذان</button><div class="src" id="fs"></div></div>
-  <p class="src">الحساب بطريقة الهيئة المصرية العامة للمساحة، بتوقيت جهازك. قد يختلف عن التقويم الرسمي بدقائق.</p>`;
+  app.innerHTML=`<div class="bar"><select id="c" aria-label="المدينة">${opts}</select><button id="g">استخدم موقعي</button></div><div id="nx"></div>
+  <div class="page" id="pt" style="padding:0">${NAMES.map(([id,nm])=>`<div class="pr" id="r-${id}"><span>${nm}</span><span></span></div>`).join('')}</div>
+  <p class="src" style="margin-top:12px">الحساب بطريقة الهيئة المصرية العامة للمساحة، بتوقيت جهازك. قد يختلف عن التقويم الرسمي بدقائق. إعدادات الأذان في قسم «الأذان».</p>`;
   $('#c').onchange=e=>{const c=e.target.value;store.set('loc',JSON.stringify({n:c,lat:CITIES[c][0],lng:CITIES[c][1]}));prayer()};
   $('#g').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{store.set('loc',JSON.stringify({n:'موقعي',lat:p.coords.latitude,lng:p.coords.longitude}));prayer()},()=>alert('تعذّر تحديد الموقع')):alert('المتصفح لا يدعم تحديد الموقع');
-  $('#ad').onchange=e=>store.set('adhan',e.target.checked?'1':'0');
-  $('#t').onclick=()=>playAdhan(true);
-  idb.get('adhan').then(b=>$('#fs').textContent=b?'تم حفظ ملف الأذان على الجهاز.':'لم تختر ملفاً؛ سيُستخدم adhan.mp3 إن وضعته بجانب index.html.').catch(()=>{});
-  $('#f').onchange=async e=>{const f=e.target.files[0];if(f){await idb.set('adhan',f);$('#fs').textContent='تم حفظ: '+f.name}};
   const draw=()=>{const n=new Date(),t=times(n,loc),c=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
     let nx=NAMES.findIndex(([id])=>t[id]*3600>c),left;
     if(nx<0){nx=0;left=t.fajr*3600+86400-c}else left=t[NAMES[nx][0]]*3600-c;
     const L=Math.max(0,Math.floor(left)),hh=String(Math.floor(L/3600)).padStart(2,'0'),mm=String(Math.floor(L%3600/60)).padStart(2,'0'),ss=String(L%60).padStart(2,'0');
-    $('#nx').textContent=`${NAMES[nx][1]} بعد ${ar(hh+':'+mm+':'+ss)}`;
-    $('#pt').innerHTML=NAMES.map(([id,nm],i)=>`<div class="pr ${i===nx?'nx':''}"><span>${nm}</span><span>${fmt(t[id])}</span></div>`).join('')};
+    $('#nx').innerHTML=`${NAMES[nx][1]} بعد <span dir="ltr">${ar(hh+':'+mm+':'+ss)}</span>`;
+    NAMES.forEach(([id],i)=>{const r=$('#r-'+id);r.lastChild.textContent=fmt(t[id]);r.classList.toggle('nx',i===nx)})};
   draw();tick=setInterval(draw,1000);
+}
+function adhanPage(){
+  app.innerHTML=`<div class="z"><p><b>الأذان</b></p>
+  <label><input type="checkbox" id="ad" ${store.get('adhan')==='1'?'checked':''}> تشغيل الأذان تلقائياً عند دخول كل صلاة (ما عدا الشروق)</label><br><br>
+  <label>ملف الأذان: <input type="file" id="f" accept="audio/*"></label><div class="src" id="fs"></div><br>
+  <button class="cnt" id="t">تجربة الأذان</button> <button class="cnt" id="s">إيقاف</button></div>
+  <p class="src">يعمل الأذان والصفحة مفتوحة فقط، وبعد الضغط في أي مكان بالصفحة (المتصفح يمنع الصوت التلقائي قبل ذلك). يمكنك أيضاً وضع ملف باسم adhan.mp3 بجانب index.html.</p>`;
+  $('#ad').onchange=e=>store.set('adhan',e.target.checked?'1':'0');
+  $('#t').onclick=()=>playAdhan(true);
+  $('#s').onclick=()=>{if(aud)aud.pause()};
+  idb.get('adhan').then(b=>$('#fs').textContent=b?'تم حفظ ملف الأذان على الجهاز.':'لم تختر ملفاً؛ سيُستخدم adhan.mp3 إن وضعته بجانب index.html.').catch(()=>{});
+  $('#f').onchange=async e=>{const f=e.target.files[0];if(f){await idb.set('adhan',f);$('#fs').textContent='تم حفظ: '+f.name}};
 }
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 $('#off').onclick=async e=>{const b=e.target;b.textContent='جارٍ التنزيل…';try{await loadQuran();await loadHadith();b.textContent='جاهز أوفلاين ✓'}catch(x){b.textContent='فشل — تأكد من الإنترنت'}};
 
+
+/* القرّاء: ملفات صوتية يضيفها المستخدم (محلياً أو برابط) */
+async function reciters(id){
+  let R=[];try{R=JSON.parse(store.get('reciters'))||[]}catch(e){}
+  if(!R.length){R=[{id:'minshawi',name:'محمد صديق المنشاوي',base:''},{id:'ebada',name:'محمد عبادة',base:''}];store.set('reciters',JSON.stringify(R))}
+  const save=()=>store.set('reciters',JSON.stringify(R)),q=x=>esc(x).replace(/"/g,'&quot;');
+  if(!id){
+    app.innerHTML=`<div class="grid">${R.map(r=>`<a class="s" href="#/reciters/${r.id}"><span class="n">♪</span><span><b>${esc(r.name)}</b></span></a>`).join('')}</div>
+    <div class="z" style="margin-top:14px"><b>إضافة قارئ</b><br><br><input type="search" id="nm" placeholder="اسم القارئ"><button class="cnt" id="add">إضافة</button></div>`;
+    $('#add').onclick=()=>{const v=$('#nm').value.trim();if(v){R.push({id:'r'+Date.now(),name:v,base:''});save();reciters()}};
+    return;
+  }
+  const r=R.find(x=>x.id===id);if(!r){location.hash='#/reciters';return}
+  let sl=null;try{sl=await loadQuran()}catch(e){}
+  const names=Array.from({length:114},(_,i)=>sl?sl[i].name:'سورة '+ar(i+1));
+  const has=await Promise.all(names.map((_,i)=>idb.get('aud:'+id+':'+(i+1)).then(Boolean).catch(()=>false)));
+  app.innerHTML=`<div class="bar"><a href="#/reciters">كل القرّاء</a><b>${esc(r.name)}</b><button id="del">حذف القارئ</button></div>
+  <audio id="pl" controls style="width:100%;margin-bottom:12px"></audio>
+  <div class="z"><label>رابط تشغيل أونلاين (اختياري): <input type="search" id="bs" value="${q(r.base)}" placeholder="https://.../"></label>
+  <div class="src">يُضاف رقم السورة من ثلاث خانات ثم .mp3 (مثال: ‎.../001.mp3)</div><button class="cnt" id="sv">حفظ الرابط</button><br><br>
+  <label>رفع ملفات للاستخدام بدون إنترنت (اسم الملف يبدأ برقم السورة مثل 001.mp3): <input type="file" id="fl" multiple accept="audio/*"></label><div class="src" id="st"></div></div>
+  <div class="grid">${names.map((nm,i)=>`<button class="s" data-n="${i+1}"><span class="n">${ar(i+1)}</span><span><b>${nm}</b><small>${has[i]?'محفوظ على الجهاز':''}</small></span></button>`).join('')}</div>`;
+  const pl=$('#pl');
+  const play=async n=>{let b;try{b=await idb.get('aud:'+id+':'+n)}catch(e){}
+    let src=b?URL.createObjectURL(b):(r.base?r.base.replace(/\/?$/,'/')+String(n).padStart(3,'0')+'.mp3':'');
+    if(!src)return alert('أضف رابطاً أو ارفع ملف هذه السورة أولاً');
+    pl.src=src;pl.dataset.n=n;pl.play().catch(()=>{})};
+  pl.onended=()=>{const n=+pl.dataset.n;if(n<114)play(n+1)};
+  app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>play(+b.dataset.n));
+  $('#sv').onclick=()=>{r.base=$('#bs').value.trim();save();$('#st').textContent='تم حفظ الرابط'};
+  $('#fl').onchange=async e=>{let c=0;for(const f of e.target.files){const m=f.name.match(/\d+/),n=m&&+m[0];if(n>=1&&n<=114){await idb.set('aud:'+id+':'+n,f);c++}}
+    $('#st').textContent='تم حفظ '+ar(c)+' ملف';setTimeout(()=>reciters(id),700)};
+  $('#del').onclick=async()=>{if(!confirm('حذف القارئ وملفاته من الجهاز؟'))return;
+    await Promise.all(names.map((_,i)=>idb.set('aud:'+id+':'+(i+1),undefined).catch(()=>{})));
+    R.splice(R.indexOf(r),1);save();location.hash='#/reciters'};
+}
 /* التوجيه */
 function route(){
   const [,t='quran',n]=location.hash.split('/');
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.t===t));
-  clearInterval(tick);if(t==='prayer')prayer();else if(t==='adhkar')adhkar();else if(t==='hadith')hadith();else if(n&&+n>=1&&+n<=114)surah(+n);else listSurahs();
+  clearInterval(tick);if(t==='prayer')prayer();else if(t==='adhan')adhanPage();else if(t==='reciters')reciters(n);else if(t==='adhkar')adhkar();else if(t==='hadith')hadith();else if(n&&+n>=1&&+n<=114)surah(+n);else listSurahs();
 }
 addEventListener('hashchange',route);route();
 </script>
