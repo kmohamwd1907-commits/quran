@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
@@ -67,6 +67,19 @@ select{padding:10px;border:1px solid var(--line);border-radius:10px;background:v
 nav{overflow-x:auto}nav a{flex:1 0 auto;white-space:nowrap}
 button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 @media(max-width:600px){nav a{padding:9px 10px;font-size:.8rem}}
+.ad{position:relative;overflow:hidden;text-align:center;padding:34px 18px 26px;border-radius:18px;border:1px solid var(--line);background:radial-gradient(circle at 50% 0%,var(--accsoft),var(--card) 70%)}
+.ad svg{width:120px;height:120px;color:var(--acc2);display:block;margin:0 auto 6px}
+.ad h2{margin:0;font-family:'Amiri Quran',serif;font-weight:400;font-size:2.4rem;color:var(--acc)}
+.ad .orn{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--acc2);margin:8px 0 18px}
+.ad .orn i{height:1px;width:60px;background:var(--acc2);opacity:.6}
+.ad .nxt{display:inline-block;min-width:220px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 22px}
+.ad .nxt small{display:block;color:var(--mute);font-size:.8rem}
+.ad .nxt b{display:block;font-family:'Amiri Quran',serif;font-weight:400;font-size:1.8rem;color:var(--acc)}
+.ad .nxt span{font-variant-numeric:tabular-nums;color:var(--ink)}
+.ad .row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:18px}
+.ad .row div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:.85rem;min-width:70px}
+.ad .row div.nx{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.ad .row div small{display:block;opacity:.8;font-size:.7rem}
 </style>
 </head>
 <body>
@@ -194,16 +207,18 @@ const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظه
 const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
 const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
 let tick;
-async function playAdhan(test){try{const b=await idb.get('adhan');aud=new Audio(b?URL.createObjectURL(b):'https://www.islamcan.com/audio/adhan/azan14.mp3');await aud.play()}catch(e){if(test)alert('تعذّر التشغيل: اختر ملف أذان من الصفحة أو ضع adhan.mp3 بجانب index.html، ثم اضغط في الصفحة وأعد المحاولة')}}
+/* ملف الأذان: ضعه بجانب index.html بهذا الاسم (أو غيّر الاسم هنا) */
+const ADHAN_FILE='adhan.mp3';
+async function playAdhan(){try{aud=new Audio(ADHAN_FILE);await aud.play()}catch(e){}}
 let played='',aud;
-setInterval(()=>{if(store.get('adhan')!=='1')return;const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
+setInterval(()=>{const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
   for(const [id] of NAMES){if(id!=='sunrise'&&Math.round(t[id]*60)===c&&played!==n.toDateString()+id){played=n.toDateString()+id;playAdhan()}}},15000);
 function prayer(){
   clearInterval(tick);
   const loc=getLoc(),opts=Object.keys(CITIES).map(c=>`<option ${c===loc.n?'selected':''}>${c}</option>`).join('')+(CITIES[loc.n]?'':`<option selected>${loc.n}</option>`);
   app.innerHTML=`<div class="bar"><select id="c" aria-label="المدينة">${opts}</select><button id="g">استخدم موقعي</button></div><div id="nx"></div>
   <div class="page" id="pt" style="padding:0">${NAMES.map(([id,nm])=>`<div class="pr" id="r-${id}"><span>${nm}</span><span></span></div>`).join('')}</div>
-  <p class="src" style="margin-top:12px">الحساب بطريقة الهيئة المصرية العامة للمساحة، بتوقيت جهازك. قد يختلف عن التقويم الرسمي بدقائق. إعدادات الأذان في قسم «الأذان».</p>`;
+  <p class="src" style="margin-top:12px">الحساب بطريقة الهيئة المصرية العامة للمساحة، بتوقيت جهازك. قد يختلف عن التقويم الرسمي بدقائق.</p>`;
   $('#c').onchange=e=>{const c=e.target.value;store.set('loc',JSON.stringify({n:c,lat:CITIES[c][0],lng:CITIES[c][1]}));prayer()};
   $('#g').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{store.set('loc',JSON.stringify({n:'موقعي',lat:p.coords.latitude,lng:p.coords.longitude}));prayer()},()=>alert('تعذّر تحديد الموقع')):alert('المتصفح لا يدعم تحديد الموقع');
   const draw=()=>{const n=new Date(),t=times(n,loc),c=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
@@ -215,55 +230,52 @@ function prayer(){
   draw();tick=setInterval(draw,1000);
 }
 function adhanPage(){
-  app.innerHTML=`<div class="z"><p><b>الأذان</b></p>
-  <label><input type="checkbox" id="ad" ${store.get('adhan')==='1'?'checked':''}> تشغيل الأذان تلقائياً عند دخول كل صلاة (ما عدا الشروق)</label><br><br>
-  <label>ملف الأذان: <input type="file" id="f" accept="audio/*"></label><div class="src" id="fs"></div><br>
-  <button class="cnt" id="t">تجربة الأذان</button> <button class="cnt" id="s">إيقاف</button></div>
-  <p class="src">يعمل الأذان والصفحة مفتوحة فقط، وبعد الضغط في أي مكان بالصفحة (المتصفح يمنع الصوت التلقائي قبل ذلك). يمكنك أيضاً وضع ملف باسم adhan.mp3 بجانب index.html.</p>`;
-  $('#ad').onchange=e=>store.set('adhan',e.target.checked?'1':'0');
-  $('#t').onclick=()=>playAdhan(true);
-  $('#s').onclick=()=>{if(aud)aud.pause()};
-  idb.get('adhan').then(b=>$('#fs').textContent=b?'تم حفظ ملف الأذان على الجهاز.':'لم تختر ملفاً؛ سيُستخدم adhan.mp3 إن وضعته بجانب index.html.').catch(()=>{});
-  $('#f').onchange=async e=>{const f=e.target.files[0];if(f){await idb.set('adhan',f);$('#fs').textContent='تم حفظ: '+f.name}};
+  const P=NAMES.filter(([id])=>id!=='sunrise');
+  app.innerHTML=`<div class="ad">
+   <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M60 8a14 14 0 1 0 7 26 11 11 0 1 1-7-26z" fill="currentColor" stroke="none" transform="translate(8 -2) scale(.8)"/><path d="M30 112V70c0-22 14-30 30-48 16 18 30 26 30 48v42"/><path d="M14 112V62M106 112V62M10 62h8M102 62h8M14 52v10M106 52v10"/><path d="M52 112V92a8 8 0 0 1 16 0v20"/><path d="M8 112h104"/></svg>
+   <h2>الأذان</h2>
+   <div class="orn"><i></i>✦<i></i></div>
+   <div class="nxt"><small>الصلاة القادمة</small><b id="an">—</b><span id="at"></span></div>
+   <div class="row">${P.map(([id,nm])=>`<div id="p-${id}">${nm}<small></small></div>`).join('')}</div>
+  </div>`;
+  const draw=()=>{const loc=getLoc(),n=new Date(),t=times(n,loc),c=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
+    let k=P.findIndex(([id])=>t[id]*3600>c);if(k<0)k=0;
+    $('#an').textContent=P[k][1];$('#at').textContent=fmt(t[P[k][0]]);
+    P.forEach(([id],i)=>{const e=$('#p-'+id);e.lastChild.textContent=fmt(t[id]);e.classList.toggle('nx',i===k)})};
+  draw();tick=setInterval(draw,30000);
 }
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 $('#off').onclick=async e=>{const b=e.target;b.textContent='جارٍ التنزيل…';try{await loadQuran();await loadHadith();b.textContent='جاهز أوفلاين ✓'}catch(x){b.textContent='فشل — تأكد من الإنترنت'}};
 
 
 /* القرّاء: ملفات صوتية يضيفها المستخدم (محلياً أو برابط) */
+/* ===== قائمة القرّاء (تُعدَّل من هنا فقط) =====
+   id    : معرّف إنجليزي بدون مسافات
+   name  : الاسم الظاهر
+   img   : مسار صورة القارئ، مثل 'img/ebada.jpg' ('' = بدون صورة)
+   audio : مجلد ملفات السور لهذا القارئ، تسميتها 001.mp3 ... 114.mp3
+           مثال: 'audio/ebada/' فيكون ملف الفاتحة audio/ebada/001.mp3 */
+const RECITERS=[
+  {id:'ebada',name:'محمد عبادة',img:'',audio:'audio/ebada/'},
+  {id:'minshawi',name:'محمد صديق المنشاوي',img:'',audio:'audio/minshawi/'}
+];
 async function reciters(id){
-  let R=[];try{R=JSON.parse(store.get('reciters'))||[]}catch(e){}
-  if(!R.length){R=[{id:'minshawi',name:'محمد صديق المنشاوي',base:''},{id:'ebada',name:'محمد عبادة',base:''}];store.set('reciters',JSON.stringify(R))}
-  const save=()=>store.set('reciters',JSON.stringify(R)),q=x=>esc(x).replace(/"/g,'&quot;');
+  const R=RECITERS,q=x=>esc(x).replace(/"/g,'&quot;');
+  const pic=(r,z)=>r.img?`<img src="${q(r.img)}" alt="" style="width:${z}px;height:${z}px;border-radius:50%;object-fit:cover;flex:none">`:'';
   if(!id){
-    app.innerHTML=`<div class="grid">${R.map(r=>`<a class="s" href="#/reciters/${r.id}"><span class="n">♪</span><span><b>${esc(r.name)}</b></span></a>`).join('')}</div>
-    <div class="z" style="margin-top:14px"><b>إضافة قارئ</b><br><br><input type="search" id="nm" placeholder="اسم القارئ"><button class="cnt" id="add">إضافة</button></div>`;
-    $('#add').onclick=()=>{const v=$('#nm').value.trim();if(v){R.push({id:'r'+Date.now(),name:v,base:''});save();reciters()}};
+    app.innerHTML=`<div class="grid">${R.map(r=>`<a class="s" href="#/reciters/${r.id}">${r.img?pic(r,44):'<span class="n">♪</span>'}<span><b>${esc(r.name)}</b></span></a>`).join('')}</div>`;
     return;
   }
   const r=R.find(x=>x.id===id);if(!r){location.hash='#/reciters';return}
   let sl=null;try{sl=await loadQuran()}catch(e){}
   const names=Array.from({length:114},(_,i)=>sl?sl[i].name:'سورة '+ar(i+1));
-  const has=await Promise.all(names.map((_,i)=>idb.get('aud:'+id+':'+(i+1)).then(Boolean).catch(()=>false)));
-  app.innerHTML=`<div class="bar"><a href="#/reciters">كل القرّاء</a><b>${esc(r.name)}</b><button id="del">حذف القارئ</button></div>
+  app.innerHTML=`<div class="bar"><a href="#/reciters">كل القرّاء</a><b style="display:flex;align-items:center;gap:8px">${pic(r,36)}${esc(r.name)}</b><span></span></div>
   <audio id="pl" controls style="width:100%;margin-bottom:12px"></audio>
-  <div class="z"><label>رابط تشغيل أونلاين (اختياري): <input type="search" id="bs" value="${q(r.base)}" placeholder="https://.../"></label>
-  <div class="src">يُضاف رقم السورة من ثلاث خانات ثم .mp3 (مثال: ‎.../001.mp3)</div><button class="cnt" id="sv">حفظ الرابط</button><br><br>
-  <label>رفع ملفات للاستخدام بدون إنترنت (اسم الملف يبدأ برقم السورة مثل 001.mp3): <input type="file" id="fl" multiple accept="audio/*"></label><div class="src" id="st"></div></div>
-  <div class="grid">${names.map((nm,i)=>`<button class="s" data-n="${i+1}"><span class="n">${ar(i+1)}</span><span><b>${nm}</b><small>${has[i]?'محفوظ على الجهاز':''}</small></span></button>`).join('')}</div>`;
+  <div class="grid">${names.map((nm,i)=>`<button class="s" data-n="${i+1}"><span class="n">${ar(i+1)}</span><span><b>${nm}</b></span></button>`).join('')}</div>`;
   const pl=$('#pl');
-  const play=async n=>{let b;try{b=await idb.get('aud:'+id+':'+n)}catch(e){}
-    let src=b?URL.createObjectURL(b):(r.base?r.base.replace(/\/?$/,'/')+String(n).padStart(3,'0')+'.mp3':'');
-    if(!src)return alert('أضف رابطاً أو ارفع ملف هذه السورة أولاً');
-    pl.src=src;pl.dataset.n=n;pl.play().catch(()=>{})};
+  const play=n=>{pl.src=r.audio.replace(/\/?$/,'/')+String(n).padStart(3,'0')+'.mp3';pl.dataset.n=n;pl.play().catch(()=>{})};
   pl.onended=()=>{const n=+pl.dataset.n;if(n<114)play(n+1)};
   app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>play(+b.dataset.n));
-  $('#sv').onclick=()=>{r.base=$('#bs').value.trim();save();$('#st').textContent='تم حفظ الرابط'};
-  $('#fl').onchange=async e=>{let c=0;for(const f of e.target.files){const m=f.name.match(/\d+/),n=m&&+m[0];if(n>=1&&n<=114){await idb.set('aud:'+id+':'+n,f);c++}}
-    $('#st').textContent='تم حفظ '+ar(c)+' ملف';setTimeout(()=>reciters(id),700)};
-  $('#del').onclick=async()=>{if(!confirm('حذف القارئ وملفاته من الجهاز؟'))return;
-    await Promise.all(names.map((_,i)=>idb.set('aud:'+id+':'+(i+1),undefined).catch(()=>{})));
-    R.splice(R.indexOf(r),1);save();location.hash='#/reciters'};
 }
 /* التوجيه */
 function route(){
