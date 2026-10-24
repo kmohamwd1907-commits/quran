@@ -208,7 +208,7 @@ const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)ret
 const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
 let tick;
 /* ملف الأذان: ضعه بجانب index.html بهذا الاسم (أو غيّر الاسم هنا) */
-const ADHAN_FILE='adhan.mp3';
+const ADHAN_FILE='azan14.mp3';
 async function playAdhan(){try{aud=new Audio(ADHAN_FILE);await aud.play()}catch(e){}}
 let played='',aud;
 setInterval(()=>{const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
