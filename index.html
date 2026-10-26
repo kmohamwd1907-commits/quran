@@ -69,6 +69,7 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 @media(max-width:600px){nav a{padding:9px 10px;font-size:.8rem}}
 .av{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--acc2);flex:none}
 .av.big{width:130px;height:130px}
+#pl{position:sticky;top:0;z-index:5;background:var(--bg);border-radius:12px}
 </style>
 </head>
 <body>
@@ -82,12 +83,16 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 <main id="app"></main>
 
 <script>
-
+/* ===== هنا تضيف القرّاء: انسخ سطراً وغيّر الاسم والرابط =====
+   img = مسار صورة القارئ (اختياري)، مثل img/minshawi.jpg
+   base = رابط المجلد الذي فيه ملفات السور، وأسماء الملفات 001.mp3 ... 114.mp3
+   أو رابط فيه {n} مكان رقم السورة، مثل: https://site.com/audio/{n}.mp3  */
+/* ملف الأذان: ضع ملفك في هذا المسار (أو غيّر المسار) */
 const ADHAN='adhan.mp3';
 
 const RECITERS=[
-  {name:'محمد صديق المنشاوي', img:'minshawi.jpg', base:['001.mp3','002.mp3','003.mp3']},
-  {name:'محمد عبادة', img:'mohamed obada.jpg', base:'audio/ebada/'},
+  {name:'محمد صديق المنشاوي', img:'minshawi.jpg', base:['001.mp3','002.mp3']},
+  {name:'محمد عبادة', img:'ebada.jpg', base:'quran-ebada/'},
 ];
 const $=s=>document.querySelector(s), app=$('#app');
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
@@ -96,12 +101,13 @@ const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[
 const fetchJSON=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.json()};
 const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتوى. اتصل بالإنترنت مرة واحدة واضغط «تجهيز أوفلاين» في أعلى الصفحة، وبعدها يعمل الموقع بدون إنترنت.<br><br><button class="cnt" onclick="route()">إعادة المحاولة</button></p>';
 
+/* الوضع الليلي */
 const root=document.documentElement;
 root.dataset.theme=store.get('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
 $('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme)};
 $('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else alert('لم تحفظ موضعاً بعد. اضغط على أي آية لحفظها.')};
 
-
+/* الأذكار */
 const ADHKAR={
  'الصباح':[
   {t:'أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ',c:1,s:'آية الكرسي — البقرة ٢٥٥'},
@@ -136,7 +142,7 @@ function adhkar(){
   };draw();
 }
 
-
+/* القرآن */
 let surahs=null;
 const idb={open(){return new Promise((ok,no)=>{const r=indexedDB.open('noor',1);r.onupgradeneeded=()=>r.result.createObjectStore('d');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})},
  async get(k){const db=await this.open();return new Promise(ok=>{const q=db.transaction('d').objectStore('d').get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok(null)})},
@@ -175,7 +181,7 @@ async function surah(n){
   $('#m').onclick=()=>size(-.2);$('#p').onclick=()=>size(.2);scrollTo(0,0);
 }
 
-
+/* الأحاديث: الأربعون النووية */
 async function hadith(){
   app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
   let d;try{d=await loadHadith()}catch(e){return fail()}
@@ -184,7 +190,8 @@ async function hadith(){
   draw();$('#q').oninput=e=>draw(e.target.value.trim());
 }
 
-
+/* مواقيت الصلاة (حساب محلي بدون إنترنت — طريقة الهيئة المصرية: فجر 19.5° وعشاء 17.5°) */
+/*PT*/
 const R=Math.PI/180,sin=x=>Math.sin(x*R),cos=x=>Math.cos(x*R),h24=x=>((x%24)+24)%24;
 function jdate(y,m,d){if(m<=2){y--;m+=12}const A=Math.floor(y/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5}
 function sun(jd){const d=jd-2451545,g=(357.529+.98560028*d)%360,q=(280.459+.98564736*d)%360,L=(q+1.915*sin(g)+.02*sin(2*g))%360,e=23.439-3.6e-7*d,RA=Math.atan2(cos(e)*sin(L),cos(L))/R/15;return{dec:Math.asin(sin(e)*sin(L))/R,eq:q/15-h24(RA)}}
@@ -195,7 +202,7 @@ function times(date,loc){
   const asrAlt=Math.atan(1/(1+Math.tan(Math.abs(lat-dec)*R)))/R;
   return{fajr:noon-a(-19.5),sunrise:noon-a(-.833),dhuhr:noon+.0333,asr:noon+a(asrAlt),maghrib:noon+a(-.833),isha:noon+a(-17.5)};
 }
-
+/*ENDPT*/
 const CITIES={'القاهرة':[30.04,31.24],'الإسكندرية':[31.2,29.92],'المنصورة':[31.04,31.38],'طنطا':[30.79,31.0],'أسيوط':[27.18,31.18],'الأقصر':[25.7,32.64],'أسوان':[24.09,32.9],'مكة المكرمة':[21.42,39.83],'المدينة المنورة':[24.47,39.61],'الرياض':[24.71,46.68],'دبي':[25.2,55.27],'عمّان':[31.95,35.93]};
 const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظهر'],['asr','العصر'],['maghrib','المغرب'],['isha','العشاء']];
 const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
@@ -235,7 +242,8 @@ function adhanPage(){
   $('#t').onclick=()=>playAdhan(true);
   $('#s').onclick=()=>{if(aud)aud.pause()};
 }
- 
+
+/* القرّاء: تُضبط من القائمة RECITERS في أول السكربت */
 const av=x=>x.img?`<img class="av" src="${x.img}" alt="" onerror="this.outerHTML='<span class=n>♪</span>'">`:'<span class="n">♪</span>';
 async function reciters(i){
   const r=RECITERS[i];
@@ -252,16 +260,17 @@ async function reciters(i){
   const pl=$('#pl');
   pl.onerror=()=>alert('الملف غير موجود أو لا يعمل: '+pl.getAttribute('src')+' — تأكد أن الملف بهذا المسار بالظبط وأنه اتعمله Push.');
   const play=n=>{
-    if(!r.base)return alert('لم تتم إضافة رابط هذا القارئ بعد');
-    const num=String(n).padStart(3,'0');
-    pl.src=r.base.includes('{n}')?r.base.replace('{n}',num):r.base.replace(/\/?$/,'/')+num+'.mp3';
-    pl.dataset.n=n;pl.play().catch(()=>{});
+    if(!r.base&&!r.files)return alert('لم تتم إضافة ملفات هذا القارئ بعد');
+    const num=String(n).padStart(3,'0'),list=Array.isArray(r.base)?r.base:r.files,
+      dir=(typeof r.base==='string'&&r.base)?r.base.replace(/\/?$/,'/'):'';
+    pl.src=list?dir+list[n-1]:(r.base.includes('{n}')?r.base.replace('{n}',num):dir+num+'.mp3');
+    pl.dataset.n=n;pl.play().catch(e=>alert('تعذّر التشغيل ('+(e.name||'خطأ')+'). اضغط زر التشغيل في المشغّل بالأعلى.'));
   };
   pl.onended=()=>{const n=+pl.dataset.n;if(n<114)play(n+1)};
   app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>play(+b.dataset.n));
 }
 
-
+/* التوجيه */
 function route(){
   const [,t='quran',n]=location.hash.split('/');
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.t===t));
