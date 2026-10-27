@@ -79,7 +79,7 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 <header>
  <div class="top">
   <h1>نُور</h1>
-  <div class="tools"><button id="off">تجهيز أوفلاين</button><button id="inst" hidden>تثبيت التطبيق</button><button id="off">تجهيز أوفلاين</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
+  <div class="tools"><button id="inst" hidden>تثبيت التطبيق</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
  </div>
  <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
 </header>
@@ -113,7 +113,7 @@ const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const fetchJSON=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.json()};
-const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتوى. اتصل بالإنترنت مرة واحدة واضغط «تجهيز أوفلاين» في أعلى الصفحة، وبعدها يعمل الموقع بدون إنترنت.<br><br><button class="cnt" onclick="route()">إعادة المحاولة</button></p>';
+const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتوى. تأكد من الاتصال بالإنترنت ثم أعد المحاولة.<br><br><button class="cnt" onclick="route()">إعادة المحاولة</button></p>';
 
 /* الوضع الليلي */
 const root=document.documentElement;
@@ -284,16 +284,6 @@ async function reciters(i){
 
 /* التطبيق والأوفلاين */
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
-const FONTCSS='https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@400;600&display=swap';
-$('#off').onclick=async e=>{const b=e.target;b.textContent='جارٍ التجهيز…';
-  try{
-    await loadQuran();await loadHadith();
-    if('caches' in window){const c=await caches.open('noor-v2');
-      const files=['./','index.html','manifest.json','icon-192.png','icon-512.png',ADHAN,...RECITERS.map(r=>r.img).filter(Boolean)];
-      await Promise.all(files.map(f=>c.add(f).catch(()=>{})))}
-    try{const css=await(await fetch(FONTCSS)).text();await Promise.all([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>fetch(m[1]).catch(()=>{})))}catch(x){}
-    b.textContent='جاهز أوفلاين ✓'
-  }catch(x){b.textContent='فشل — تأكد من الإنترنت'}};
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('#inst').hidden=false});
 $('#inst').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#inst').hidden=true};
 
