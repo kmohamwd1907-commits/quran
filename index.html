@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>نور — القرآن الكريم والأذكار والأحاديث</title>
 <meta name="description" content="القرآن الكريم كاملاً، أذكار الصباح والمساء وبعد الصلاة، والأربعون النووية.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +37,6 @@ input[type=search]{width:100%;padding:12px 14px;border:1px solid var(--line);bor
 .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
 .bar a,.bar button{background:var(--accsoft);color:var(--acc);border:0;border-radius:8px;padding:6px 14px;text-decoration:none;font:inherit;cursor:pointer}
 .mushaf{font-family:'Amiri Quran',serif;line-height:1.9;text-align:right;text-wrap:pretty;word-spacing:0;font-size:var(--fs,1.9rem)}
-.mushaf .a{cursor:pointer}
 .mushaf .a.mark{background:var(--accsoft);border-radius:6px}
 .end{color:var(--acc2);font-size:.8em;margin:0 2px;white-space:nowrap}
 .bsm{text-align:center;font-family:'Amiri Quran',serif;font-size:1.9rem;color:var(--acc);margin:6px 0 14px}
@@ -76,7 +79,7 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 <header>
  <div class="top">
   <h1>نُور</h1>
-  <div class="tools"><button id="off">تجهيز أوفلاين</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
+  <div class="tools"><button id="off">تجهيز أوفلاين</button><button id="inst" hidden>تثبيت التطبيق</button><button id="off">تجهيز أوفلاين</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
  </div>
  <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
 </header>
@@ -102,9 +105,8 @@ const RECITERS=[
 '081.mp3','082.mp3','083.mp3','084.mp3','085.mp3','086.mp3','087.mp3','088.mp3','089.mp3','090.mp3',
 '091.mp3','092.mp3','093.mp3','094.mp3','095.mp3','096.mp3','097.mp3','098.mp3','099.mp3','100.mp3',
 '101.mp3','102.mp3','103.mp3','104.mp3','105.mp3','106.mp3','107.mp3','108.mp3','109.mp3','110.mp3',
-'111.mp3','112.mp3','113.mp3','114.mp3',
-]},
-  {name:'محمد عبادة', img:'ebada.jpg', base:'quran-ebada/'},
+'111.mp3','112.mp3','113.mp3','114.mp3',]},
+  {name:'محمد عبادة', img:'mohamed obada.jpg', base:'quran-ebada/'},
 ];
 const $=s=>document.querySelector(s), app=$('#app');
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
@@ -117,7 +119,7 @@ const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتو�
 const root=document.documentElement;
 root.dataset.theme=store.get('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
 $('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme)};
-$('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else alert('لم تحفظ موضعاً بعد. اضغط على أي آية لحفظها.')};
+$('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else alert('لم تفتح أي سورة بعد.')};
 
 /* الأذكار */
 const ADHKAR={
@@ -181,14 +183,13 @@ async function listSurahs(){
 async function surah(n){
   app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
   let d;try{d=(await loadQuran()).find(x=>x.number==n);if(!d.ayahs)d=(await fetchJSON(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`)).data}catch(e){return fail()}
-  const fs=+store.get('fs')||1.9, mark=+(store.get('bm')||'').split('/')[1]||0, same=(store.get('bm')||'').split('/')[0]==n;
+  const fs=+store.get('fs')||1.9;store.set('bm',String(n));
   const body=d.ayahs.map(a=>{let t=a.text;if(a.numberInSurah===1&&n!=1)t=t.split(' ').slice(4).join(' ');
-    return `<span class="a ${same&&mark===a.numberInSurah?'mark':''}" data-n="${a.numberInSurah}">${t}<span class="end">﴿${ar(a.numberInSurah)}﴾</span></span>`}).join(' ');
+    return `<span class="a">${t}<span class="end">﴿${ar(a.numberInSurah)}﴾</span></span>`}).join(' ');
   app.innerHTML=`<div class="bar"><a href="#/quran">كل السور</a><b style="font-family:'Amiri Quran';font-size:1.5rem">${d.name}</b><span><button id="m">أ−</button> <button id="p">أ+</button></span></div>
   <div class="page">${n!=1&&n!=9?'<div class="bsm">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>':''}<div class="mushaf" style="--fs:${fs}rem">${body}</div></div>
   <div class="bar" style="margin-top:14px">${n>1?`<a href="#/quran/${n-1}">السورة السابقة</a>`:'<span></span>'}${n<114?`<a href="#/quran/${+n+1}">السورة التالية</a>`:'<span></span>'}</div>`;
   const m=$('.mushaf');
-  m.onclick=e=>{const a=e.target.closest('.a');if(!a)return;m.querySelectorAll('.mark').forEach(x=>x.classList.remove('mark'));a.classList.add('mark');store.set('bm',n+'/'+a.dataset.n)};
   const size=x=>{const v=Math.min(3.4,Math.max(1.2,(+store.get('fs')||1.9)+x));store.set('fs',v);m.style.setProperty('--fs',v+'rem')};
   $('#m').onclick=()=>size(-.2);$('#p').onclick=()=>size(.2);scrollTo(0,0);
 }
@@ -280,6 +281,21 @@ async function reciters(i){
   };
   app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>play(+b.dataset.n));
 }
+
+/* التطبيق والأوفلاين */
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+const FONTCSS='https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@400;600&display=swap';
+$('#off').onclick=async e=>{const b=e.target;b.textContent='جارٍ التجهيز…';
+  try{
+    await loadQuran();await loadHadith();
+    if('caches' in window){const c=await caches.open('noor-v2');
+      const files=['./','index.html','manifest.json','icon-192.png','icon-512.png',ADHAN,...RECITERS.map(r=>r.img).filter(Boolean)];
+      await Promise.all(files.map(f=>c.add(f).catch(()=>{})))}
+    try{const css=await(await fetch(FONTCSS)).text();await Promise.all([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>fetch(m[1]).catch(()=>{})))}catch(x){}
+    b.textContent='جاهز أوفلاين ✓'
+  }catch(x){b.textContent='فشل — تأكد من الإنترنت'}};
+let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('#inst').hidden=false});
+$('#inst').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#inst').hidden=true};
 
 /* التوجيه */
 function route(){
