@@ -56,7 +56,7 @@ select{padding:10px;border:1px solid var(--line);border-radius:10px;background:v
 .pr{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
 .pr.nx{background:var(--accsoft);color:var(--acc);font-weight:600}
 #nx{font-variant-numeric:tabular-nums;text-align:center;font-size:1.2rem;color:var(--acc);margin:10px 0 16px}
- 
+
 .top{flex-wrap:wrap}
 .tools{display:flex;gap:6px;flex-wrap:wrap}
 .tools button{margin:0;font-size:.8rem;padding:6px 10px}
@@ -80,6 +80,11 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 .ib span{flex:1;font-size:.9rem}
 .ib button{border:0;border-radius:8px;padding:6px 14px;font:inherit;cursor:pointer;background:#e6bf4f;color:#111}
 .ib #ix{background:transparent;color:#f6f1e3;font-size:1.2rem;padding:2px 8px}
+.tb{width:190px;height:190px;border-radius:50%;background:var(--acc);color:var(--on);border:6px solid var(--acc2);font:inherit;font-size:3.2rem;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
+.tb:active{transform:scale(.97)}
+.pb{height:10px;background:var(--accsoft);border-radius:99px;overflow:hidden;margin:8px 0}
+.pb i{display:block;height:100%;background:var(--acc2)}
+.dl{max-height:50vh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 </style>
 </head>
 <body>
@@ -88,34 +93,21 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
   <h1>نُور</h1>
   <div class="tools"><button id="inst" hidden>تثبيت التطبيق</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
  </div>
- <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/videos" data-t="videos">فيديوهات</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
+ <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/tasbih" data-t="tasbih">السبحة</a><a href="#/hifz" data-t="hifz">الحفظ</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
 </header>
 <div id="ib" class="ib" hidden><span id="it">ثبّت الموقع كتطبيق على جهازك</span><button id="iy">تثبيت</button><button id="ix" aria-label="إغلاق">×</button></div>
 <div id="ul" class="ib" hidden style="inset:auto 10px 70px 10px"><span>اضغط في أي مكان لتفعيل الأذان والتنبيهات</span></div>
 <main id="app"></main>
- 
+
 <script>
-/* ===== هنا تضيف الفيديوهات: انسخ سطراً من الأمثلة، فكّ التعليق (//) وغيّر العنوان والملف
-   file = مسار ملف فيديو mp4 جنب index.html، أو youtube = معرّف فيديو يوتيوب (الجزء بعد v=)
-   poster = صورة الغلاف (اختياري) ===== */
-const VIDEOS=[
-  // {title:'عنوان الفيديو', file:'video1.mp4', poster:'video1.jpg'},
-  // {title:'عنوان آخر', youtube:'dQw4w9WgXcQ'},
-];
- 
-/* ===== هنا تضيف القرّاء: انسخ سطراً وغيّر الاسم والرابط =====
-   img = مسار صورة القارئ (اختياري)، مثل img/minshawi.jpg
-   base = رابط المجلد الذي فيه ملفات السور، وأسماء الملفات 001.mp3 ... 114.mp3
-   أو رابط فيه {n} مكان رقم السورة، مثل: https://site.com/audio/{n}.mp3  */
-/* ===== الأذان: أضف ملفات الأذان هنا. أول أذان هو التلقائي (ويمكن للمستخدم اختيار غيره) ===== */
+
 const ADHANS=[
   {name:'الأذان', file:'adhan.mp3'},
-  // {name:'أذان آخر', file:'adhan2.mp3'},
+  {name:'أذان مكة', file:'adhan-makkah.mp3'},
 ];
- 
+
 const RECITERS=[
-  {name:'محمد صديق المنشاوي', img:'minshawi.jpg', base:[
-'001.mp3','002.mp3','003.mp3','004.mp3','005.mp3','006.mp3','007.mp3','008.mp3','009.mp3','010.mp3',
+  {name:'محمد صديق المنشاوي', img:'minshawi.jpg', base:['001.mp3','002.mp3','003.mp3','004.mp3','005.mp3','006.mp3','007.mp3','008.mp3','009.mp3','010.mp3',
 '011.mp3','012.mp3','013.mp3','014.mp3','015.mp3','016.mp3','017.mp3','018.mp3','019.mp3','020.mp3',
 '021.mp3','022.mp3','023.mp3','024.mp3','025.mp3','026.mp3','027.mp3','028.mp3','029.mp3','030.mp3',
 '031.mp3','032.mp3','033.mp3','034.mp3','035.mp3','036.mp3','037.mp3','038.mp3','039.mp3','040.mp3',
@@ -126,9 +118,8 @@ const RECITERS=[
 '081.mp3','082.mp3','083.mp3','084.mp3','085.mp3','086.mp3','087.mp3','088.mp3','089.mp3','090.mp3',
 '091.mp3','092.mp3','093.mp3','094.mp3','095.mp3','096.mp3','097.mp3','098.mp3','099.mp3','100.mp3',
 '101.mp3','102.mp3','103.mp3','104.mp3','105.mp3','106.mp3','107.mp3','108.mp3','109.mp3','110.mp3',
-'111.mp3','112.mp3','113.mp3','114.mp3',
-]},
-  {name:'محمد عبادة', img:'ebada.jpg', base:'quran-ebada/'},
+'111.mp3','112.mp3','113.mp3','114.mp3',]},
+  {name:'محمد عبادة', img:'ebada.jpg', base:'quran-ebada/', soon:true},
 ];
 const $=s=>document.querySelector(s), app=$('#app');
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
@@ -136,13 +127,13 @@ const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},se
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const fetchJSON=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.json()};
 const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتوى. تأكد من الاتصال بالإنترنت ثم أعد المحاولة.<br><br><button class="cnt" onclick="route()">إعادة المحاولة</button></p>';
- 
+
 /* الوضع الليلي */
 const root=document.documentElement;
 root.dataset.theme=store.get('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
 $('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme)};
 $('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else toast('لم تفتح أي سورة بعد.')};
- 
+
 /* الأذكار */
 const ADHKAR={
  'الصباح':[
@@ -177,7 +168,7 @@ function adhkar(){
     app.querySelectorAll('.cnt').forEach(b=>b.onclick=()=>{let n=+b.dataset.c;if(n>0){b.dataset.c=--n;b.querySelector('b').textContent=n?ar(n):'تم ✓';if(!n)b.classList.add('done')}});
   };draw();
 }
- 
+
 /* القرآن */
 let surahs=null;
 const idb={open(){return new Promise((ok,no)=>{const r=indexedDB.open('noor',1);r.onupgradeneeded=()=>r.result.createObjectStore('d');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})},
@@ -202,20 +193,23 @@ async function listSurahs(){
   const g=$('#g'),draw=q=>g.innerHTML=surahs.filter(s=>!q||s.name.includes(q)||String(s.number)===q).map(s=>`<a class="s" href="#/quran/${s.number}"><span class="n">${ar(s.number)}</span><span><b>${s.name}</b><small>${s.revelationType==='Meccan'?'مكية':'مدنية'} — ${ar(s.numberOfAyahs||s.ayahs.length)} آية</small></span></a>`).join('')||'<p class="msg">لا توجد نتائج</p>';
   draw();$('#q').oninput=e=>draw(e.target.value.trim());
 }
-async function surah(n){
+async function surah(n,pg=1){
   app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
   let d;try{d=(await loadQuran()).find(x=>x.number==n);if(!d.ayahs)d=(await fetchJSON(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`)).data}catch(e){return fail()}
   const fs=+store.get('fs')||1.9;store.set('bm',String(n));
-  const body=d.ayahs.map(a=>{let t=a.text;if(a.numberInSurah===1&&n!=1)t=t.split(' ').slice(4).join(' ');
+  const pages=[];d.ayahs.forEach(a=>{const k=a.page||Math.ceil(a.numberInSurah/15);let g=pages[pages.length-1];if(!g||g.k!==k){g={k,list:[]};pages.push(g)}g.list.push(a)});
+  pg=Math.min(Math.max(1,pg),pages.length);
+  const body=pages[pg-1].list.map(a=>{let t=a.text;if(a.numberInSurah===1&&n!=1&&n!=9)t=t.split(' ').slice(4).join(' ');
     return `<span class="a">${t}<span class="end">﴿${ar(a.numberInSurah)}﴾</span></span>`}).join(' ');
   app.innerHTML=`<div class="bar"><a href="#/quran">كل السور</a><b style="font-family:'Amiri Quran';font-size:1.5rem">${d.name}</b><span><button id="m">أ−</button> <button id="p">أ+</button></span></div>
-  <div class="page">${n!=1&&n!=9?'<div class="bsm">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>':''}<div class="mushaf" style="--fs:${fs}rem">${body}</div></div>
+  <div class="page">${pg===1&&n!=1&&n!=9?'<div class="bsm">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>':''}<div class="mushaf" style="--fs:${fs}rem">${body}</div></div>
+  ${pages.length>1?`<div class="bar" style="margin-top:14px">${pg>1?`<a href="#/quran/${n}/${pg-1}">الصفحة السابقة</a>`:'<span></span>'}<b>صفحة ${ar(pg)} من ${ar(pages.length)}</b>${pg<pages.length?`<a href="#/quran/${n}/${pg+1}">الصفحة التالية</a>`:'<span></span>'}</div>`:''}
   <div class="bar" style="margin-top:14px">${n>1?`<a href="#/quran/${n-1}">السورة السابقة</a>`:'<span></span>'}${n<114?`<a href="#/quran/${+n+1}">السورة التالية</a>`:'<span></span>'}</div>`;
   const m=$('.mushaf');
   const size=x=>{const v=Math.min(3.4,Math.max(1.2,(+store.get('fs')||1.9)+x));store.set('fs',v);m.style.setProperty('--fs',v+'rem')};
   $('#m').onclick=()=>size(-.2);$('#p').onclick=()=>size(.2);scrollTo(0,0);
 }
- 
+
 /* الأحاديث: الأربعون النووية */
 async function hadith(){
   app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
@@ -224,7 +218,7 @@ async function hadith(){
   const l=$('#l'),draw=q=>l.innerHTML=d.hadiths.filter(h=>!q||h.text.includes(q)).map(h=>`<div class="z h"><span class="num">الحديث ${ar(h.hadithnumber)} — الأربعون النووية</span><p>${esc(h.text)}</p></div>`).join('')||'<p class="msg">لا توجد نتائج</p>';
   draw();$('#q').oninput=e=>draw(e.target.value.trim());
 }
- 
+
 /* مواقيت الصلاة (حساب محلي بدون إنترنت — طريقة الهيئة المصرية: فجر 19.5° وعشاء 17.5°) */
 /*PT*/
 const R=Math.PI/180,sin=x=>Math.sin(x*R),cos=x=>Math.cos(x*R),h24=x=>((x%24)+24)%24;
@@ -285,13 +279,17 @@ function adhanPage(){
   $('#s').onclick=()=>{if(aud)aud.pause()};
   const as=$('#as');if(as)as.onchange=e=>{store.set('adhanSel',e.target.value);adhanPage()};
 }
- 
+
 /* القرّاء: تُضبط من القائمة RECITERS في أول السكربت */
 const av=x=>x.img?`<img class="av" src="${x.img}" alt="" onerror="this.outerHTML='<span class=n>♪</span>'">`:'<span class="n">♪</span>';
 async function reciters(i){
   const r=RECITERS[i];
   if(!r){
-    app.innerHTML=RECITERS.length?'<div class="grid">'+RECITERS.map((x,k)=>`<a class="s" href="#/reciters/${k}">${av(x)}<span><b>${esc(x.name)}</b></span></a>`).join('')+'</div>':'<p class="msg">لم تتم إضافة قرّاء بعد.</p>';
+    app.innerHTML=RECITERS.length?'<div class="grid">'+RECITERS.map((x,k)=>`<a class="s" href="#/reciters/${k}">${av(x)}<span><b>${esc(x.name)}</b>${x.soon?'<small>قريباً</small>':''}</span></a>`).join('')+'</div>':'<p class="msg">لم تتم إضافة قرّاء بعد.</p>';
+    return;
+  }
+  if(r.soon){
+    app.innerHTML=`<div class="bar"><a href="#/reciters">كل القرّاء</a><b>${esc(r.name)}</b><span></span></div>${r.img?`<div style="text-align:center;margin-bottom:12px">${av(r).replace('class="av"','class="av big"')}</div>`:''}<p class="msg">قريباً إن شاء الله</p>`;
     return;
   }
   let sl=null;try{sl=await loadQuran()}catch(e){}
@@ -303,6 +301,7 @@ async function reciters(i){
   const pl=$('#pl');
   pl.onerror=()=>toast(!navigator.onLine?'هذا الصوت يحتاج إنترنت':'الملف غير موجود أو لا يعمل: '+pl.getAttribute('src')+' — تأكد أن الملف بهذا المسار بالظبط وأنه اتعمله Push.');
   const play=n=>{
+    if(!navigator.onLine)return toast('يلزم استخدام الإنترنت لتشغيل التلاوة');
     if(!r.base&&!r.files)return toast('لم تتم إضافة ملفات هذا القارئ بعد');
     const num=String(n).padStart(3,'0'),list=Array.isArray(r.base)?r.base:r.files,
       dir=(typeof r.base==='string'&&r.base)?r.base.replace(/\/?$/,'/'):'';
@@ -311,7 +310,7 @@ async function reciters(i){
   };
   app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>play(+b.dataset.n));
 }
- 
+
 /* التطبيق والأوفلاين */
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 let dp;const ibx=()=>store.get('ibx')==='1';
@@ -322,41 +321,87 @@ if(/iphone|ipad/i.test(navigator.userAgent)&&!navigator.standalone&&!ibx()){$('#
 $('#ix').onclick=()=>{$('#ib').hidden=true;store.set('ibx','1')};
 $('#iy').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#ib').hidden=true};
 $('#inst').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#inst').hidden=true};
- 
-function videos(i){
-  const v=VIDEOS[i];
-  if(!v){
-    app.innerHTML=VIDEOS.length?'<div class="grid">'+VIDEOS.map((x,k)=>`<a class="s" href="#/videos/${k}">${x.poster?`<img class="av" src="${x.poster}" alt="" onerror="this.outerHTML='<span class=n>▶</span>'">`:'<span class="n">▶</span>'}<span><b>${esc(x.title)}</b></span></a>`).join('')+'</div>':'<p class="msg">لا توجد فيديوهات بعد.</p>';
-    return;
-  }
-  const player=v.youtube?`<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.youtube)}" title="${esc(v.title)}" style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`:`<video controls playsinline preload="metadata" ${v.poster?`poster="${v.poster}"`:''} src="${v.file||''}" style="width:100%;border-radius:12px;background:#000"></video>`;
-  app.innerHTML=`<div class="bar"><a href="#/videos">كل الفيديوهات</a><b>${esc(v.title)}</b><span></span></div>${player}`;
-  const el=app.querySelector('video');if(el)el.onerror=()=>toast('الفيديو غير موجود أو لا يعمل: '+el.getAttribute('src'));
-}
- 
-if(ADHANS.length){$('#ul').hidden=false;addEventListener('click',()=>{$('#ul').hidden=true;try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(e){}},{once:true})}
- 
+
 /* رسائل خفيفة بدل نافذة alert */
 function toast(m){let t=$('#tt');if(!t){t=document.createElement('div');t.id='tt';t.className='ib';t.style.cssText='inset:10px 10px auto 10px;justify-content:center;pointer-events:none';document.body.appendChild(t)}
   t.textContent=m;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,4000)}
- 
+
 /* تجهيز تلقائي للأوفلاين في الخلفية عند وجود إنترنت */
 const FONTCSS='https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@400;600&display=swap';
 async function prefetch(){
   if(!navigator.onLine)return;
   try{await loadQuran();await loadHadith()}catch(e){}
   try{if('caches' in window){const c=await caches.open('noor-v3');
-    const f=['./','index.html','manifest.json','icon-192.png','icon-512.png',...ADHANS.map(a=>a.file),...RECITERS.map(r=>r.img),...VIDEOS.map(v=>v.poster)].filter(Boolean);
+    const f=['./','index.html','manifest.json','icon-192.png','icon-512.png',...ADHANS.map(a=>a.file),...RECITERS.map(r=>r.img)].filter(Boolean);
     await Promise.all(f.map(x=>c.add(x).catch(()=>{})))}}catch(e){}
   try{const css=await(await fetch(FONTCSS)).text();await Promise.all([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>fetch(m[1]).catch(()=>{})))}catch(e){}
 }
 setTimeout(prefetch,3000);
- 
+
+/* السبحة */
+const DHIKR=['سبحان الله','الحمد لله','الله أكبر','لا إله إلا الله','أستغفر الله','اللهم صل وسلم على نبينا محمد','لا حول ولا قوة إلا بالله'];
+function tasbih(){
+  let st={i:0,c:0,t:33,total:0};try{st=Object.assign(st,JSON.parse(store.get('tasbih')))}catch(e){}
+  const save=()=>store.set('tasbih',JSON.stringify(st));
+  app.innerHTML=`<div class="z" style="text-align:center">
+   <select id="d" aria-label="الذكر">${DHIKR.map((x,k)=>`<option value="${k}" ${k===st.i?'selected':''}>${x}</option>`).join('')}</select>
+   <select id="t" aria-label="العدد المستهدف">${[33,100,1000,0].map(x=>`<option value="${x}" ${x===st.t?'selected':''}>${x?ar(x):'بدون حد'}</option>`).join('')}</select>
+   <p id="dh" style="font-family:'Amiri Quran',serif;font-size:1.6rem;margin:18px 0 12px"></p>
+   <button id="tb" class="tb" aria-label="تسبيح"><span id="tc"></span></button>
+   <div class="src" id="ts" style="margin:12px 0"></div><button class="cnt" id="tr">تصفير</button></div>`;
+  const draw=()=>{$('#dh').textContent=DHIKR[st.i];$('#tc').textContent=ar(st.c);$('#ts').textContent='الإجمالي: '+ar(st.total)};
+  $('#tb').onclick=()=>{st.c++;st.total++;
+    if(st.t&&st.c>=st.t){try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}toast('تم '+ar(st.t)+' — '+DHIKR[st.i]);st.c=0}
+    else{try{navigator.vibrate&&navigator.vibrate(20)}catch(e){}}
+    save();draw()};
+  $('#d').onchange=e=>{st.i=+e.target.value;st.c=0;save();draw()};
+  $('#t').onchange=e=>{st.t=+e.target.value;st.c=0;save();draw()};
+  $('#tr').onclick=()=>{st.c=0;save();draw()};
+  draw();
+}
+
+/* خطة حفظ القرآن (٦٠٤ صفحة) */
+let pmap=null;
+async function pageMap(){
+  if(pmap)return pmap;
+  const sl=await loadQuran(),st={},en={};
+  sl.forEach(s=>s.ayahs.forEach(a=>{if(!a.page)return;const x={n:s.number,s:s.name,a:a.numberInSurah};if(!st[a.page])st[a.page]=x;en[a.page]=x}));
+  return pmap={st,en};
+}
+async function hifz(){
+  let h=null;try{h=JSON.parse(store.get('hifz'))}catch(e){}
+  if(!h){
+    app.innerHTML=`<div class="z"><p><b>اختر مدة حفظ القرآن</b></p><div class="grid">${[1,2,3].map(m=>`<button class="s" data-m="${m}"><span class="n">${ar(m)}</span><span><b>${m===1?'شهر':m===2?'شهران':'ثلاثة أشهر'}</b><small>${ar(Math.ceil(604/(m*30)))} صفحة يومياً</small></span></button>`).join('')}</div></div>`;
+    app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>{const d=new Date();d.setHours(0,0,0,0);store.set('hifz',JSON.stringify({m:+b.dataset.m,start:d.getTime(),done:[]}));hifz()});
+    return;
+  }
+  const days=h.m*30,ppd=Math.ceil(604/days),now=new Date();now.setHours(0,0,0,0);
+  const today=Math.min(days,Math.max(1,Math.round((now-h.start)/864e5)+1));
+  let pm=null;try{pm=await pageMap()}catch(e){}
+  const rng=d=>{const f=(d-1)*ppd+1;return f>604?null:[f,Math.min(d*ppd,604)]};
+  const pg=r=>r?'صفحات '+ar(r[0])+(r[1]>r[0]?' – '+ar(r[1]):''):'مراجعة عامة';
+  const place=r=>pm&&r&&pm.st[r[0]]&&pm.en[r[1]]?` — من ${pm.st[r[0]].s} آية ${ar(pm.st[r[0]].a)} إلى ${pm.en[r[1]].s} آية ${ar(pm.en[r[1]].a)}`:'';
+  const donePages=h.done.reduce((a,d)=>{const r=rng(d);return a+(r?r[1]-r[0]+1:0)},0),pct=Math.min(100,Math.round(donePages/604*100));
+  const tr=rng(today),isDone=h.done.includes(today),prev=today>1?rng(today-1):null;
+  const save=()=>store.set('hifz',JSON.stringify(h));
+  const toggle=d=>{const k=h.done.indexOf(d);k<0?h.done.push(d):h.done.splice(k,1);save();hifz()};
+  app.innerHTML=`<div class="z"><b>خطة ${h.m===1?'شهر':h.m===2?'شهرين':'ثلاثة أشهر'} — ${ar(ppd)} صفحة يومياً</b>
+   <div class="pb"><i style="width:${pct}%"></i></div><div class="src">تم حفظ ${ar(donePages)} من ${ar(604)} صفحة (${ar(pct)}٪)</div></div>
+   <div class="z"><b>اليوم ${ar(today)} من ${ar(days)}</b><p style="margin:8px 0">${pg(tr)}${place(tr)}</p>
+   ${prev?`<div class="src">مراجعة حفظ الأمس: ${pg(prev)}</div>`:''}
+   <br>${tr&&pm&&pm.st[tr[0]]?`<a class="cnt" style="text-decoration:none" href="#/quran/${pm.st[tr[0]].n}">فتح المصحف</a> `:''}<button class="cnt ${isDone?'done':''}" id="hd">${isDone?'تم حفظ اليوم ✓':'تم حفظ اليوم'}</button></div>
+   <div class="dl">${Array.from({length:days},(_,k)=>k+1).map(d=>`<label class="pr ${d===today?'nx':''}"><span>يوم ${ar(d)} — ${pg(rng(d))}</span><input type="checkbox" data-d="${d}" ${h.done.includes(d)?'checked':''}></label>`).join('')}</div>
+   <p style="margin-top:12px"><button class="cnt" id="hr">تغيير الخطة</button></p>`;
+  $('#hd').onclick=()=>toggle(today);
+  app.querySelectorAll('input[data-d]').forEach(c=>c.onchange=()=>toggle(+c.dataset.d));
+  $('#hr').onclick=()=>{if(confirm('تغيير الخطة سيمسح تقدّمك الحالي. متابعة؟')){store.set('hifz','');hifz()}};
+}
+
 /* التوجيه */
 function route(){
-  const [,t='quran',n]=location.hash.split('/');
+  const [,t='quran',n,pg]=location.hash.split('/');
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.t===t));
-  clearInterval(tick);if(t==='prayer')prayer();else if(t==='adhan')adhanPage();else if(t==='videos')videos(n);else if(t==='reciters')reciters(n);else if(t==='adhkar')adhkar();else if(t==='hadith')hadith();else if(n&&+n>=1&&+n<=114)surah(+n);else listSurahs();
+  clearInterval(tick);if(t==='prayer')prayer();else if(t==='adhan')adhanPage();else if(t==='reciters')reciters(n);else if(t==='tasbih')tasbih();else if(t==='hifz')hifz();else if(t==='adhkar')adhkar();else if(t==='hadith')hadith();else if(n&&+n>=1&&+n<=114)surah(+n,+pg||1);else listSurahs();
 }
 addEventListener('hashchange',route);route();
 </script>
