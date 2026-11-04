@@ -56,7 +56,7 @@ select{padding:10px;border:1px solid var(--line);border-radius:10px;background:v
 .pr{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
 .pr.nx{background:var(--accsoft);color:var(--acc);font-weight:600}
 #nx{font-variant-numeric:tabular-nums;text-align:center;font-size:1.2rem;color:var(--acc);margin:10px 0 16px}
-
+ 
 .top{flex-wrap:wrap}
 .tools{display:flex;gap:6px;flex-wrap:wrap}
 .tools button{margin:0;font-size:.8rem;padding:6px 10px}
@@ -93,7 +93,7 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 <div id="ib" class="ib" hidden><span id="it">ثبّت الموقع كتطبيق على جهازك</span><button id="iy">تثبيت</button><button id="ix" aria-label="إغلاق">×</button></div>
 <div id="ul" class="ib" hidden style="inset:auto 10px 70px 10px"><span>اضغط في أي مكان لتفعيل الأذان والتنبيهات</span></div>
 <main id="app"></main>
-
+ 
 <script>
 /* ===== هنا تضيف الفيديوهات: انسخ سطراً من الأمثلة، فكّ التعليق (//) وغيّر العنوان والملف
    file = مسار ملف فيديو mp4 جنب index.html، أو youtube = معرّف فيديو يوتيوب (الجزء بعد v=)
@@ -102,7 +102,7 @@ const VIDEOS=[
   // {title:'عنوان الفيديو', file:'video1.mp4', poster:'video1.jpg'},
   // {title:'عنوان آخر', youtube:'dQw4w9WgXcQ'},
 ];
-
+ 
 /* ===== هنا تضيف القرّاء: انسخ سطراً وغيّر الاسم والرابط =====
    img = مسار صورة القارئ (اختياري)، مثل img/minshawi.jpg
    base = رابط المجلد الذي فيه ملفات السور، وأسماء الملفات 001.mp3 ... 114.mp3
@@ -112,9 +112,10 @@ const ADHANS=[
   {name:'الأذان', file:'adhan.mp3'},
   // {name:'أذان آخر', file:'adhan2.mp3'},
 ];
-
+ 
 const RECITERS=[
-  {name:'محمد صديق المنشاوي', img:'minshawi.jpg', base:['001.mp3','002.mp3','003.mp3','004.mp3','005.mp3','006.mp3','007.mp3','008.mp3','009.mp3','010.mp3',
+  {name:'محمد صديق المنشاوي', img:'minshawi.jpg', base:[
+'001.mp3','002.mp3','003.mp3','004.mp3','005.mp3','006.mp3','007.mp3','008.mp3','009.mp3','010.mp3',
 '011.mp3','012.mp3','013.mp3','014.mp3','015.mp3','016.mp3','017.mp3','018.mp3','019.mp3','020.mp3',
 '021.mp3','022.mp3','023.mp3','024.mp3','025.mp3','026.mp3','027.mp3','028.mp3','029.mp3','030.mp3',
 '031.mp3','032.mp3','033.mp3','034.mp3','035.mp3','036.mp3','037.mp3','038.mp3','039.mp3','040.mp3',
@@ -135,13 +136,13 @@ const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},se
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const fetchJSON=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.json()};
 const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتوى. تأكد من الاتصال بالإنترنت ثم أعد المحاولة.<br><br><button class="cnt" onclick="route()">إعادة المحاولة</button></p>';
-
+ 
 /* الوضع الليلي */
 const root=document.documentElement;
 root.dataset.theme=store.get('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
 $('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme)};
-$('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else alert('لم تفتح أي سورة بعد.')};
-
+$('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else toast('لم تفتح أي سورة بعد.')};
+ 
 /* الأذكار */
 const ADHKAR={
  'الصباح':[
@@ -176,7 +177,7 @@ function adhkar(){
     app.querySelectorAll('.cnt').forEach(b=>b.onclick=()=>{let n=+b.dataset.c;if(n>0){b.dataset.c=--n;b.querySelector('b').textContent=n?ar(n):'تم ✓';if(!n)b.classList.add('done')}});
   };draw();
 }
-
+ 
 /* القرآن */
 let surahs=null;
 const idb={open(){return new Promise((ok,no)=>{const r=indexedDB.open('noor',1);r.onupgradeneeded=()=>r.result.createObjectStore('d');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})},
@@ -214,7 +215,7 @@ async function surah(n){
   const size=x=>{const v=Math.min(3.4,Math.max(1.2,(+store.get('fs')||1.9)+x));store.set('fs',v);m.style.setProperty('--fs',v+'rem')};
   $('#m').onclick=()=>size(-.2);$('#p').onclick=()=>size(.2);scrollTo(0,0);
 }
-
+ 
 /* الأحاديث: الأربعون النووية */
 async function hadith(){
   app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
@@ -223,7 +224,7 @@ async function hadith(){
   const l=$('#l'),draw=q=>l.innerHTML=d.hadiths.filter(h=>!q||h.text.includes(q)).map(h=>`<div class="z h"><span class="num">الحديث ${ar(h.hadithnumber)} — الأربعون النووية</span><p>${esc(h.text)}</p></div>`).join('')||'<p class="msg">لا توجد نتائج</p>';
   draw();$('#q').oninput=e=>draw(e.target.value.trim());
 }
-
+ 
 /* مواقيت الصلاة (حساب محلي بدون إنترنت — طريقة الهيئة المصرية: فجر 19.5° وعشاء 17.5°) */
 /*PT*/
 const R=Math.PI/180,sin=x=>Math.sin(x*R),cos=x=>Math.cos(x*R),h24=x=>((x%24)+24)%24;
@@ -249,7 +250,7 @@ async function playAdhan(test,file){
   catch(e){
     if(!test)return;
     let ok=true;try{ok=(await fetch(f,{method:'HEAD'})).ok}catch(x){}
-    alert(ok?'الملف موجود لكن تعذّر تشغيله ('+(e.name||'خطأ')+'). تأكد أنه mp3 سليم، أو اضغط في الصفحة وأعد المحاولة.':'ملف الأذان غير موجود على الموقع في المسار: '+f+' — تأكد من الاسم والمسار والحروف الصغيرة والكبيرة.')
+    toast(ok?'الملف موجود لكن تعذّر تشغيله ('+(e.name||'خطأ')+'). تأكد أنه mp3 سليم، أو اضغط في الصفحة وأعد المحاولة.':'ملف الأذان غير موجود على الموقع في المسار: '+f+' — تأكد من الاسم والمسار والحروف الصغيرة والكبيرة.')
   }
 }
 function notify(msg){try{if(!('Notification' in window)||Notification.permission!=='granted')return;
@@ -265,7 +266,7 @@ function prayer(){
   <div class="page" id="pt" style="padding:0">${NAMES.map(([id,nm])=>`<div class="pr" id="r-${id}"><span>${nm}</span><span></span></div>`).join('')}</div>
   <p class="src" style="margin-top:12px">الحساب بطريقة الهيئة المصرية العامة للمساحة، بتوقيت جهازك. قد يختلف عن التقويم الرسمي بدقائق. إعدادات الأذان في قسم «الأذان».</p>`;
   $('#c').onchange=e=>{const c=e.target.value;store.set('loc',JSON.stringify({n:c,lat:CITIES[c][0],lng:CITIES[c][1]}));prayer()};
-  $('#g').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{store.set('loc',JSON.stringify({n:'موقعي',lat:p.coords.latitude,lng:p.coords.longitude}));prayer()},()=>alert('تعذّر تحديد الموقع')):alert('المتصفح لا يدعم تحديد الموقع');
+  $('#g').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{store.set('loc',JSON.stringify({n:'موقعي',lat:p.coords.latitude,lng:p.coords.longitude}));prayer()},()=>toast('تعذّر تحديد الموقع')):toast('المتصفح لا يدعم تحديد الموقع');
   const draw=()=>{const n=new Date(),t=times(n,loc),c=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
     let nx=NAMES.findIndex(([id])=>t[id]*3600>c),left;
     if(nx<0){nx=0;left=t.fajr*3600+86400-c}else left=t[NAMES[nx][0]]*3600-c;
@@ -284,7 +285,7 @@ function adhanPage(){
   $('#s').onclick=()=>{if(aud)aud.pause()};
   const as=$('#as');if(as)as.onchange=e=>{store.set('adhanSel',e.target.value);adhanPage()};
 }
-
+ 
 /* القرّاء: تُضبط من القائمة RECITERS في أول السكربت */
 const av=x=>x.img?`<img class="av" src="${x.img}" alt="" onerror="this.outerHTML='<span class=n>♪</span>'">`:'<span class="n">♪</span>';
 async function reciters(i){
@@ -300,17 +301,17 @@ async function reciters(i){
   <audio id="pl" controls style="width:100%;margin-bottom:12px"></audio>
   <div class="grid">${names.map((nm,k)=>`<button class="s" data-n="${k+1}"><span class="n">${ar(k+1)}</span><span><b>${nm}</b></span></button>`).join('')}</div>`;
   const pl=$('#pl');
-  pl.onerror=()=>alert('الملف غير موجود أو لا يعمل: '+pl.getAttribute('src')+' — تأكد أن الملف بهذا المسار بالظبط وأنه اتعمله Push.');
+  pl.onerror=()=>toast(!navigator.onLine?'هذا الصوت يحتاج إنترنت':'الملف غير موجود أو لا يعمل: '+pl.getAttribute('src')+' — تأكد أن الملف بهذا المسار بالظبط وأنه اتعمله Push.');
   const play=n=>{
-    if(!r.base&&!r.files)return alert('لم تتم إضافة ملفات هذا القارئ بعد');
+    if(!r.base&&!r.files)return toast('لم تتم إضافة ملفات هذا القارئ بعد');
     const num=String(n).padStart(3,'0'),list=Array.isArray(r.base)?r.base:r.files,
       dir=(typeof r.base==='string'&&r.base)?r.base.replace(/\/?$/,'/'):'';
     pl.src=list?dir+list[n-1]:(r.base.includes('{n}')?r.base.replace('{n}',num):dir+num+'.mp3');
-    pl.dataset.n=n;pl.play().catch(e=>alert('تعذّر التشغيل ('+(e.name||'خطأ')+'). اضغط زر التشغيل في المشغّل بالأعلى.'));
+    pl.dataset.n=n;pl.play().catch(e=>toast('تعذّر التشغيل ('+(e.name||'خطأ')+'). اضغط زر التشغيل في المشغّل بالأعلى.'));
   };
   app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>play(+b.dataset.n));
 }
-
+ 
 /* التطبيق والأوفلاين */
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 let dp;const ibx=()=>store.get('ibx')==='1';
@@ -321,7 +322,7 @@ if(/iphone|ipad/i.test(navigator.userAgent)&&!navigator.standalone&&!ibx()){$('#
 $('#ix').onclick=()=>{$('#ib').hidden=true;store.set('ibx','1')};
 $('#iy').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#ib').hidden=true};
 $('#inst').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#inst').hidden=true};
-
+ 
 function videos(i){
   const v=VIDEOS[i];
   if(!v){
@@ -330,11 +331,27 @@ function videos(i){
   }
   const player=v.youtube?`<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.youtube)}" title="${esc(v.title)}" style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`:`<video controls playsinline preload="metadata" ${v.poster?`poster="${v.poster}"`:''} src="${v.file||''}" style="width:100%;border-radius:12px;background:#000"></video>`;
   app.innerHTML=`<div class="bar"><a href="#/videos">كل الفيديوهات</a><b>${esc(v.title)}</b><span></span></div>${player}`;
-  const el=app.querySelector('video');if(el)el.onerror=()=>alert('الفيديو غير موجود أو لا يعمل: '+el.getAttribute('src'));
+  const el=app.querySelector('video');if(el)el.onerror=()=>toast('الفيديو غير موجود أو لا يعمل: '+el.getAttribute('src'));
 }
-
+ 
 if(ADHANS.length){$('#ul').hidden=false;addEventListener('click',()=>{$('#ul').hidden=true;try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(e){}},{once:true})}
-
+ 
+/* رسائل خفيفة بدل نافذة alert */
+function toast(m){let t=$('#tt');if(!t){t=document.createElement('div');t.id='tt';t.className='ib';t.style.cssText='inset:10px 10px auto 10px;justify-content:center;pointer-events:none';document.body.appendChild(t)}
+  t.textContent=m;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,4000)}
+ 
+/* تجهيز تلقائي للأوفلاين في الخلفية عند وجود إنترنت */
+const FONTCSS='https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@400;600&display=swap';
+async function prefetch(){
+  if(!navigator.onLine)return;
+  try{await loadQuran();await loadHadith()}catch(e){}
+  try{if('caches' in window){const c=await caches.open('noor-v3');
+    const f=['./','index.html','manifest.json','icon-192.png','icon-512.png',...ADHANS.map(a=>a.file),...RECITERS.map(r=>r.img),...VIDEOS.map(v=>v.poster)].filter(Boolean);
+    await Promise.all(f.map(x=>c.add(x).catch(()=>{})))}}catch(e){}
+  try{const css=await(await fetch(FONTCSS)).text();await Promise.all([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>fetch(m[1]).catch(()=>{})))}catch(e){}
+}
+setTimeout(prefetch,3000);
+ 
 /* التوجيه */
 function route(){
   const [,t='quran',n]=location.hash.split('/');
