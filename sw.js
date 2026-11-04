@@ -11,7 +11,7 @@ self.addEventListener('fetch',e=>{
     e.respondWith(M(rq).then(r=>r||fetch(rq).then(x=>{const y=x.clone();caches.open(C).then(c=>c.put(rq,y));return x})));return;
   }
   if(u.origin!==location.origin)return;
-  if(rq.headers.has('range')||/\.(mp3|m4a|wav|ogg|mp4|webm|m4v)$/i.test(u.pathname)){
+  if(rq.headers.has('range')||/\.(mp3|m4a|wav|ogg)$/i.test(u.pathname)){
     e.respondWith(M(rq,{ignoreSearch:true}).then(r=>r||fetch(rq)));return;
   }
   e.respondWith(fetch(rq).then(r=>{if(r.ok){const x=r.clone();caches.open(C).then(c=>c.put(rq,x))}return r}).catch(()=>M(rq).then(r=>r||M('index.html'))));
