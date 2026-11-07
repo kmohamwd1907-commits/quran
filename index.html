@@ -297,7 +297,9 @@ async function reciters(i){
     return;
   }
   if(r.soon){
-    app.innerHTML=`<div class="bar"><a href="#/reciters">كل القرّاء</a><b>${esc(r.name)}</b><span></span></div>${r.img?`<div style="text-align:center;margin-bottom:12px">${av(r).replace('class="av"','class="av big"')}</div>`:''}<p class="msg">قريباً إن شاء الله</p>`;
+    app.innerHTML=`<div class="bar"><a href="#/reciters">كل القرّاء</a><span></span></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin:24px 0 8px">${r.img?av(r).replace('class="av"','class="av big"'):''}<b style="font-size:1.5rem">${esc(r.name)}</b></div>
+    <p class="msg" style="padding:24px 0;font-size:1.3rem;color:var(--acc)">قريباً إن شاء الله</p>`;
     return;
   }
   let sl=null;try{sl=await loadQuran()}catch(e){}
