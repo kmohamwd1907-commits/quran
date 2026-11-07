@@ -86,13 +86,14 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 .pb i{display:block;height:100%;background:var(--acc2)}
 .dl{max-height:50vh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 .tools button.hot{background:#e6bf4f;color:#111}
+.tools #th{font-size:1.6rem;line-height:1.1;padding:2px 12px}
 </style>
 </head>
 <body>
 <header>
  <div class="top">
   <h1>نُور</h1>
-  <div class="tools"><button id="upd" hidden>تحديث التطبيق</button><button id="inst" hidden>تثبيت التطبيق</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
+  <div class="tools"><button id="upd" hidden>تحديث التطبيق</button><button id="inst" hidden>تثبيت التطبيق</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع" title="ليلي / نهاري">☀</button></div>
  </div>
  <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/tasbih" data-t="tasbih">السبحة</a><a href="#/hifz" data-t="hifz">الحفظ</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
 </header>
@@ -131,7 +132,9 @@ const fail=()=>app.innerHTML='<p class="msg">تعذّر تحميل المحتو�
 /* الوضع الليلي */
 const root=document.documentElement;
 root.dataset.theme=store.get('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-$('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme)};
+const thIcon=()=>$('#th').textContent=root.dataset.theme==='dark'?'☾':'☀';
+thIcon();
+$('#th').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('theme',root.dataset.theme);thIcon()};
 $('#bm').onclick=()=>{const b=store.get('bm');if(b)location.hash='#/quran/'+b;else toast('لم تفتح أي سورة بعد.')};
 
 /* الأذكار */
@@ -196,9 +199,9 @@ async function listSurahs(){
 async function surah(n,pg=1){
   app.innerHTML='<p class="msg">جارٍ التحميل…</p>';
   let d;try{d=(await loadQuran()).find(x=>x.number==n);if(!d.ayahs)d=(await fetchJSON(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`)).data}catch(e){return fail()}
-  const fs=+store.get('fs')||1.9;store.set('bm',String(n));
+  const fs=+store.get('fs')||1.9;
   const pages=[];d.ayahs.forEach(a=>{const k=a.page||Math.ceil(a.numberInSurah/15);let g=pages[pages.length-1];if(!g||g.k!==k){g={k,list:[]};pages.push(g)}g.list.push(a)});
-  pg=Math.min(Math.max(1,pg),pages.length);
+  pg=Math.min(Math.max(1,pg),pages.length);store.set('bm',n+'/'+pg);
   const body=pages[pg-1].list.map(a=>{let t=a.text;if(a.numberInSurah===1&&n!=1&&n!=9)t=t.split(' ').slice(4).join(' ');
     return `<span class="a">${t}<span class="end">﴿${ar(a.numberInSurah)}﴾</span></span>`}).join(' ');
   app.innerHTML=`<div class="bar"><a href="#/quran">كل السور</a><b style="font-family:'Amiri Quran';font-size:1.5rem">${d.name}</b><span><button id="m">أ−</button> <button id="p">أ+</button></span></div>
@@ -280,10 +283,8 @@ function adhanPage(){
   const sel=+store.get('adhanSel')||0;
   if(!ADHANS.length){app.innerHTML='<p class="msg">لم تتم إضافة أذان بعد.</p>';return}
   app.innerHTML=`<div class="grid">${ADHANS.map((a,k)=>`<button class="s" data-k="${k}"><span class="n">♪</span><span><b>${esc(a.name)}</b><small>${k===sel?'الأذان التلقائي':''}</small></span></button>`).join('')}</div>
-  <div style="margin-top:14px"><button class="cnt" id="s">إيقاف</button></div>
   ${ADHANS.length>1?`<div class="z" style="margin-top:14px"><label>الأذان التلقائي: <select id="as">${ADHANS.map((a,k)=>`<option value="${k}" ${k===sel?'selected':''}>${esc(a.name)}</option>`).join('')}</select></label></div>`:''}`;
   app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>playAdhan(true,ADHANS[+b.dataset.k].file));
-  $('#s').onclick=()=>{if(aud)aud.pause()};
   const as=$('#as');if(as)as.onchange=e=>{store.set('adhanSel',e.target.value);adhanPage()};
 }
 
@@ -338,7 +339,6 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had){const u=$('#upd');u.hidden=false;u.textContent='يوجد تحديث — اضغط للتحديث';u.classList.add('hot')}});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{})});
 }
-if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)$('#upd').hidden=false;
 $('#upd').onclick=async()=>{
   if(!navigator.onLine)return toast('يلزم الإنترنت للتحديث');
   toast('جارٍ التحديث…');
@@ -392,10 +392,11 @@ async function pageMap(){
   sl.forEach(s=>s.ayahs.forEach(a=>{if(!a.page)return;const x={n:s.number,s:s.name,a:a.numberInSurah};if(!st[a.page])st[a.page]=x;en[a.page]=x}));
   return pmap={st,en};
 }
+const MN={1:'شهر',2:'شهرين',3:'ثلاثة أشهر',4:'أربعة أشهر',5:'خمسة أشهر'};
 async function hifz(){
   let h=null;try{h=JSON.parse(store.get('hifz'))}catch(e){}
   if(!h){
-    app.innerHTML=`<div class="z"><p><b>اختر مدة حفظ القرآن</b></p><div class="grid">${[1,2,3].map(m=>`<button class="s" data-m="${m}"><span class="n">${ar(m)}</span><span><b>${m===1?'شهر':m===2?'شهران':'ثلاثة أشهر'}</b><small>${ar(Math.ceil(604/(m*30)))} صفحة يومياً</small></span></button>`).join('')}</div></div>`;
+    app.innerHTML=`<div class="z"><p><b>اختر مدة حفظ القرآن</b></p><div class="grid">${[3,4,5].map(m=>`<button class="s" data-m="${m}"><span class="n">${ar(m)}</span><span><b>${MN[m]}</b><small>${ar(Math.ceil(604/(m*30)))} صفحة يومياً</small></span></button>`).join('')}</div></div>`;
     app.querySelectorAll('button.s').forEach(b=>b.onclick=()=>{const d=new Date();d.setHours(0,0,0,0);store.set('hifz',JSON.stringify({m:+b.dataset.m,start:d.getTime(),done:[]}));hifz()});
     return;
   }
@@ -409,7 +410,7 @@ async function hifz(){
   const tr=rng(today),isDone=h.done.includes(today),prev=today>1?rng(today-1):null;
   const save=()=>store.set('hifz',JSON.stringify(h));
   const toggle=d=>{const k=h.done.indexOf(d);k<0?h.done.push(d):h.done.splice(k,1);save();hifz()};
-  app.innerHTML=`<div class="z"><b>خطة ${h.m===1?'شهر':h.m===2?'شهرين':'ثلاثة أشهر'} — ${ar(ppd)} صفحة يومياً</b>
+  app.innerHTML=`<div class="z"><b>خطة ${MN[h.m]||ar(h.m)+' أشهر'} — ${ar(ppd)} صفحة يومياً</b>
    <div class="pb"><i style="width:${pct}%"></i></div><div class="src">تم حفظ ${ar(donePages)} من ${ar(604)} صفحة (${ar(pct)}٪)</div></div>
    <div class="z"><b>اليوم ${ar(today)} من ${ar(days)}</b><p style="margin:8px 0">${pg(tr)}${place(tr)}</p>
    ${prev?`<div class="src">مراجعة حفظ الأمس: ${pg(prev)}</div>`:''}
