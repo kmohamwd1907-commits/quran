@@ -85,13 +85,14 @@ button.s{width:100%;cursor:pointer;font:inherit;color:inherit;text-align:right}
 .pb{height:10px;background:var(--accsoft);border-radius:99px;overflow:hidden;margin:8px 0}
 .pb i{display:block;height:100%;background:var(--acc2)}
 .dl{max-height:50vh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.tools button.hot{background:#e6bf4f;color:#111}
 </style>
 </head>
 <body>
 <header>
  <div class="top">
   <h1>نُور</h1>
-  <div class="tools"><button id="inst" hidden>تثبيت التطبيق</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
+  <div class="tools"><button id="upd" hidden>تحديث التطبيق</button><button id="inst" hidden>تثبيت التطبيق</button><button id="bm" title="آخر موضع قراءة">متابعة القراءة</button><button id="th" aria-label="تغيير الوضع">الوضع</button></div>
  </div>
  <nav><a href="#/quran" data-t="quran">القرآن</a><a href="#/adhkar" data-t="adhkar">الأذكار</a><a href="#/hadith" data-t="hadith">الأحاديث</a><a href="#/prayer" data-t="prayer">المواقيت</a><a href="#/reciters" data-t="reciters">القرّاء</a><a href="#/tasbih" data-t="tasbih">السبحة</a><a href="#/hifz" data-t="hifz">الحفظ</a><a href="#/adhan" data-t="adhan">الأذان</a></nav>
 </header>
@@ -118,7 +119,7 @@ const RECITERS=[
 '091.mp3','092.mp3','093.mp3','094.mp3','095.mp3','096.mp3','097.mp3','098.mp3','099.mp3','100.mp3',
 '101.mp3','102.mp3','103.mp3','104.mp3','105.mp3','106.mp3','107.mp3','108.mp3','109.mp3','110.mp3',
 '111.mp3','112.mp3','113.mp3','114.mp3',]},
-  {name:'محمد عبادة', img:'mohamed obada.jpg', base:'quran-ebada/', soon:true},
+  {name:'محمد عبادة', img:'ebada.jpg', base:'quran-ebada/', soon:true},
 ];
 const $=s=>document.querySelector(s), app=$('#app');
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
@@ -236,10 +237,15 @@ const NAMES=[['fajr','الفجر'],['sunrise','الشروق'],['dhuhr','الظه
 const getLoc=()=>{try{const l=JSON.parse(store.get('loc'));if(l&&l.lat!=null)return l}catch(e){}return{n:'القاهرة',lat:30.04,lng:31.24}};
 const fmt=h=>{const m=Math.round(h*60)%1440,H=Math.floor(m/60);return ar(H%12||12)+':'+ar(String(m%60).padStart(2,'0'))+(H<12?' ص':' م')};
 let tick;
+function prime(){
+  const f=(ADHANS[+store.get('adhanSel')||0]||ADHANS[0]||{}).file;if(!f)return;
+  aud=aud||new Audio();aud.src=f;aud.muted=true;
+  aud.play().then(()=>{aud.pause();aud.currentTime=0;aud.muted=false}).catch(()=>{aud.muted=false});
+}
 async function playAdhan(test,file){
   const f=file||(ADHANS[+store.get('adhanSel')||0]||ADHANS[0]||{}).file;
   if(!f)return;
-  try{if(aud)aud.pause();aud=new Audio(f);await aud.play()}
+  try{aud=aud||new Audio();if(aud.getAttribute('src')!==f)aud.src=f;aud.muted=false;aud.currentTime=0;await aud.play()}
   catch(e){
     if(!test)return;
     let ok=true;try{ok=(await fetch(f,{method:'HEAD'})).ok}catch(x){}
@@ -250,8 +256,10 @@ function notify(msg){try{if(!('Notification' in window)||Notification.permission
   const o={body:msg,icon:'icon-192.png'};
   navigator.serviceWorker&&navigator.serviceWorker.getRegistration().then(r=>r?r.showNotification('نور',o):new Notification('نور',o)).catch(()=>{})}catch(e){}}
 let played='',aud;
-setInterval(()=>{const n=new Date(),t=times(n,getLoc()),c=n.getHours()*60+n.getMinutes();
-  for(const [id,nm] of NAMES){if(id!=='sunrise'&&Math.round(t[id]*60)===c&&played!==n.toDateString()+id){played=n.toDateString()+id;playAdhan();notify('حان الآن موعد صلاة '+nm)}}},15000);
+setInterval(()=>{const n=new Date(),t=times(n,getLoc()),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
+  for(const [id,nm] of NAMES){if(id==='sunrise')continue;
+    const d=sec-Math.round(t[id]*60)*60,key=n.toDateString()+id;
+    if(d>=0&&d<=120&&played!==key){played=key;playAdhan();notify('حان الآن موعد صلاة '+nm)}}},5000);
 function prayer(){
   clearInterval(tick);
   const loc=getLoc(),opts=Object.keys(CITIES).map(c=>`<option ${c===loc.n?'selected':''}>${c}</option>`).join('')+(CITIES[loc.n]?'':`<option selected>${loc.n}</option>`);
@@ -320,6 +328,23 @@ if(/iphone|ipad/i.test(navigator.userAgent)&&!navigator.standalone&&!ibx()){$('#
 $('#ix').onclick=()=>{$('#ib').hidden=true;store.set('ibx','1')};
 $('#iy').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#ib').hidden=true};
 $('#inst').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#inst').hidden=true};
+
+/* تفعيل الأذان والإشعارات عند أول ضغطة */
+if(ADHANS.length){$('#ul').hidden=false;addEventListener('click',()=>{$('#ul').hidden=true;prime();try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(e){}},{once:true})}
+
+/* تحديث التطبيق */
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  const had=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had){const u=$('#upd');u.hidden=false;u.textContent='يوجد تحديث — اضغط للتحديث';u.classList.add('hot')}});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{})});
+}
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)$('#upd').hidden=false;
+$('#upd').onclick=async()=>{
+  if(!navigator.onLine)return toast('يلزم الإنترنت للتحديث');
+  toast('جارٍ التحديث…');
+  try{const r=await navigator.serviceWorker.getRegistration();if(r)await r.update()}catch(e){}
+  setTimeout(()=>location.reload(),600);
+};
 
 /* رسائل خفيفة بدل نافذة alert */
 function toast(m){let t=$('#tt');if(!t){t=document.createElement('div');t.id='tt';t.className='ib';t.style.cssText='inset:10px 10px auto 10px;justify-content:center;pointer-events:none';document.body.appendChild(t)}
